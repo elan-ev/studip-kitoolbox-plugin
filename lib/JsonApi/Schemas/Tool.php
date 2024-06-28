@@ -20,6 +20,7 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'name'          => (string) $resource['name'],
             'description'   => (string) $resource['description'],
             'url'           => (string) $resource['url'],
+            'active'        => (bool) $resource['active'],
         ];
     }
 

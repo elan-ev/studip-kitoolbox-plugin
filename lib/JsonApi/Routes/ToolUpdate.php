@@ -61,6 +61,10 @@ class ToolUpdate extends JsonApiController
             $resource->description = $json['data']['attributes']['url'];
         }
 
+        if (isset($json['data']['attributes']['active'])) {
+            $resource->description = $json['data']['attributes']['active'];
+        }
+
         $resource->store();
 
         return $resource;
