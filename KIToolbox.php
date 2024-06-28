@@ -2,13 +2,26 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-class KIToolbox extends StudIPPlugin implements StandardPlugin
+class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin
 {
     public function __construct()
     {
         parent::__construct();
 
+        $perm = $GLOBALS['perm'];
+        if ($perm->have_perm('root')) {
+            $item = new Navigation($this->_('KI-Toolbox konfigurieren'), PluginEngine::getLink($this, array(), 'admin'));
+            if (Navigation::hasItem('/admin/config') && !Navigation::hasItem('/admin/config/kitoolbox')) {
+                Navigation::addItem('/admin/config/kitoolbox', $item);
+            }
+        }
+
         PageLayout::addScript($this->getPluginUrl() . '/dist/kitoolbox.js', [
+            'type' => 'module',
+            'rel'  => 'preload',
+        ]);
+
+        PageLayout::addScript($this->getPluginUrl() . '/dist/kitoolbox-admin.js', [
             'type' => 'module',
             'rel'  => 'preload',
         ]);

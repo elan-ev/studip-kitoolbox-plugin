@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
             rollupOptions: {
               input: {
                 kitoolbox: 'src/kitoolbox.js',
+                'kitoolbox-admin': 'src/kitoolbox-admin.js',
               },
                 output: {
                     entryFileNames: `[name].js`,

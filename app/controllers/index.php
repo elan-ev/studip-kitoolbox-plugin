@@ -1,5 +1,5 @@
 <?php
-use CoursewareSnapshots\Models\Snapshot;
+
 class IndexController extends StudipController
 {
     
@@ -18,7 +18,6 @@ class IndexController extends StudipController
         }
         
     }
-
 
     protected function getHelpbarContent()
     {
