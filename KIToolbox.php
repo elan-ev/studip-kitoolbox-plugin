@@ -61,6 +61,13 @@ class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin
 
     public function getIconNavigation($courseId, $last_visit, $user_id)
     {
+        $icon = new AutoNavigation(
+            $this->getPluginName(),
+            PluginEngine::getURL($this, array('cid' => $courseId, 'iconnav' => 'true'), 'index', true)
+        );
+        $icon->setImage(Icon::create('network2', 'inactive', ['title' => 'KI-Toolbox']));
+
+        return $icon;
     }
 
     public function getInfoTemplate($courseId)
