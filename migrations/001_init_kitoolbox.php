@@ -9,6 +9,7 @@ final class InitKitoolbox extends Migration
             `name`                  VARCHAR(255) NOT NULL,
             `description`           MEDIUMTEXT NOT NULL,
             `url`                   MEDIUMTEXT NOT NULL,
+            `max_quota`             INT(11) NOT NULL,
             `active`                TINYINT(1) NOT NULL DEFAULT '1',
             `mkdate`                INT(11) UNSIGNED NOT NULL,
             `chdate`                INT(11) UNSIGNED NOT NULL,
