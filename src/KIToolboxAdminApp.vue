@@ -1,8 +1,13 @@
 <template>
-    <h1>the ki toolbox admin app...</h1>  
+    <the-admin-tool-table />
   </template>
   <script>
-  
-  export default {}
+  import TheAdminToolTable from './components/admin/TheAdminToolTable.vue';
+
+  export default {
+    components: {
+      TheAdminToolTable
+    }
+  }
   
   </script>
