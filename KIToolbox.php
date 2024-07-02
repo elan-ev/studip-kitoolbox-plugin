@@ -1,9 +1,14 @@
 <?php
+use JsonApi\Contracts\JsonApiPlugin;
+use KIToolbox\JsonApi\Routes;
+use KIToolbox\JsonApi\Schemas;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin
+class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin, JsonApiPlugin
 {
+    use Routes;
+    use Schemas;
     public function __construct()
     {
         parent::__construct();

@@ -28,29 +28,35 @@ class ToolCreate extends JsonApiController
 
         return $this->getCreatedResponse($resource);
     }
-    protected function validateResourceDocument($json, $data): ?string
+    protected function validateResourceDocument($json, $data)
     {
         if (!self::arrayHas($json, 'data')) {
             return 'Missing `data` member at document´s top level.';
         }
-        if (self::arrayHas($json, 'data.name')) {
-            return 'New document must not have an `name`.';
+        if (!self::arrayHas($json, 'data.attributes.key')) {
+            return 'New document must not have an `key`.';
         }
-        if (self::arrayHas($json, 'data.url')) {
+        if (!self::arrayHas($json, 'data.attributes.url')) {
             return 'New document must not have an `url`.';
         }
     }
 
     private function createTool(array $json): Tool
     {
-        $name = self::arrayGet($json, 'data.attributes.name', '');
-        $description = self::arrayGet($json, 'data.attributes.description', '');
+        $key = self::arrayGet($json, 'data.attributes.key', '');
         $url = self::arrayGet($json, 'data.attributes.url', '');
+
+        //TODO: get name, description, max_quota from tool url
+        $name = 'dummy';
+        $description= 'lorem ipsum';
+        $max_quota = 42;
 
         $tool = Tool::create([
             'name' => $name,
-            'description' =>  $description,
-            'url' => $url
+            'description' => $description,
+            'jwt_key' => $key,
+            'url' => $url,
+            'max_quota' => $max_quota
         ]);
 
         return $tool;

@@ -21,6 +21,8 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'description'   => (string) $resource['description'],
             'url'           => (string) $resource['url'],
             'active'        => (bool) $resource['active'],
+            'key'           => (string) $resource['jwt_key'],
+            'max-quota'     => (int) $resource['max_quota'],
         ];
     }
 

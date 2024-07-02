@@ -26,7 +26,7 @@ class ToolUpdate extends JsonApiController
             throw new AuthorizationFailedException();
         }
         $json = $this->validate($request, $resource);
-        $resource = $this->updateTool($user, $resource, $json);
+        $resource = $this->updateTool($resource, $json);
 
         return $this->getContentResponse($resource);
     }
@@ -37,11 +37,11 @@ class ToolUpdate extends JsonApiController
             return 'Missing `data` member at document´s top level.';
         }
 
-        if (!self::arrayHas($json, 'data.name')) {
+        if (!self::arrayHas($json, 'data.attributes.name')) {
             return 'Document must have an `name`.';
         }
 
-        if (!self::arrayHas($json, 'data.url')) {
+        if (!self::arrayHas($json, 'data.attributes.url')) {
             return 'Document must have an `url`.';
         }
     }
@@ -58,11 +58,11 @@ class ToolUpdate extends JsonApiController
         }
 
         if (isset($json['data']['attributes']['url'])) {
-            $resource->description = $json['data']['attributes']['url'];
+            $resource->url = $json['data']['attributes']['url'];
         }
 
         if (isset($json['data']['attributes']['active'])) {
-            $resource->description = $json['data']['attributes']['active'];
+            $resource->active = $json['data']['attributes']['active'];
         }
 
         $resource->store();

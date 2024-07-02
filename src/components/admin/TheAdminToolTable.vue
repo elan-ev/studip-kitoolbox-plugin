@@ -1,8 +1,9 @@
 <script setup>
-import { computed, nextTick, ref } from 'vue';
+import { computed, ref } from 'vue';
 import StudipActionMenu from '../studip/StudipActionMenu.vue';
 import StudipDialog from '../studip/StudipDialog.vue';
 import { useGettext } from 'vue3-gettext';
+import { useToolsStore } from './../../stores/tools';
 const { $gettext } = useGettext();
 
 const openRemoveDialog = ref(false);
@@ -11,24 +12,18 @@ const openCreateDialog = ref(false);
 const currentTool = ref(null);
 const newTool = ref(null);
 
-// TODO: read from db via json:api
-const tools = ref([{
-    id: 1,
-    name: 'test',
-    description: 'lorem ipsum',
-    url: 'test.de',
-    key: '1234',
-    'supported-quota': 'users',
-    'max-quota': 4
-}]);
+const toolsStore = useToolsStore();
+
+const tools = computed(() => {
+    return toolsStore.all;
+});
 
 const setCurrentTool = (tool) => {
     currentTool.value = JSON.parse(JSON.stringify(tool));
-}
+};
 const resetCurrentTool = () => {
     currentTool.value = null;
-}
-
+};
 
 const showRemovetool = (tool) => {
     setCurrentTool(tool);
@@ -36,13 +31,12 @@ const showRemovetool = (tool) => {
 };
 const updateShowRemoveDialog = (state) => {
     openRemoveDialog.value = state;
-}
+};
 const removeTool = () => {
     updateShowRemoveDialog(false);
+    toolsStore.deleteTool(currentTool.value);
     resetCurrentTool();
-    // TODO
-}
-
+};
 
 const showEditTool = (tool) => {
     setCurrentTool(tool);
@@ -50,19 +44,18 @@ const showEditTool = (tool) => {
 };
 const updateShowEditDialog = (state) => {
     openEditDialog.value = state;
-}
+};
 const storeTool = () => {
     updateShowEditDialog(false);
+    toolsStore.updateTool(currentTool.value);
     resetCurrentTool();
-    // TODO
-}
-
+};
 
 const initNewTool = () => {
     newTool.value = {
         url: '',
         key: '',
-    }
+    };
 };
 const showCreateTool = () => {
     updateShowCreateDialog(true);
@@ -70,13 +63,12 @@ const showCreateTool = () => {
 };
 const updateShowCreateDialog = (state) => {
     openCreateDialog.value = state;
-}
+};
 const createTool = () => {
     updateShowCreateDialog(false);
-    //TODO
-
+    toolsStore.createTool(newTool.value);
     newTool.value = null;
-}
+};
 </script>
 
 <template>
@@ -196,11 +188,11 @@ const createTool = () => {
                 <form class="default">
                     <label>
                         {{ $gettext('URL') }}
-                        <input type="url"  v-model="currentTool.url"/>
+                        <input type="url" v-model="currentTool.url" />
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
-                        <input type="text"  v-model="currentTool.name"/>
+                        <input type="text" v-model="currentTool.name" />
                     </label>
                     <label>
                         {{ $gettext('Beschreibung') }}
@@ -223,11 +215,11 @@ const createTool = () => {
                 <form class="default">
                     <label>
                         {{ $gettext('URL') }}
-                        <input type="url"  v-model="newTool.url"/>
+                        <input type="url" v-model="newTool.url" />
                     </label>
                     <label>
-                        {{ $gettext('Titel') }}
-                        <input type="text"  v-model="newTool.key"/>
+                        {{ $gettext('Key') }}
+                        <input type="text" v-model="newTool.key" />
                     </label>
                 </form>
             </template>
