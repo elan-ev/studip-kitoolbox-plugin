@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as s,a as n,b as o,d as c,t as p}from"./assets/pinia-DR7XVEpL.js";const r={};function i(d,f,g,x,h,m){return s(),a("h1",null,"the ki toolbox app...")}const l=e(r,[["render",i]]),t=n(l),u=o({availableLanguages:{en:"English",de:"Deutsch"},defaultLanguage:"de",translations:p});t.use(u);const _=c();t.use(_);t.mount("#kitoolbox-app");
