@@ -38,6 +38,7 @@ const removeTool = () => {
     resetCurrentTool();
 };
 
+
 const showEditTool = (tool) => {
     setCurrentTool(tool);
     updateShowEditDialog(true);
@@ -50,6 +51,10 @@ const storeTool = () => {
     toolsStore.updateTool(currentTool.value);
     resetCurrentTool();
 };
+const toggleActiveState = (tool) => {
+    toolsStore.toggleActiveState(tool);
+}
+
 
 const initNewTool = () => {
     newTool.value = {
@@ -102,7 +107,7 @@ const createTool = () => {
             <tbody>
                 <tr v-for="tool in tools" :key="tool.id">
                     <td>
-                        <input type="checkbox" />
+                        <input type="checkbox" :checked="tool.active" @change="toggleActiveState(tool)" />
                     </td>
                     <td>
                         {{ tool.url }}

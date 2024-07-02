@@ -71,6 +71,11 @@ export const useToolsStore = defineStore('kitoolbox-tools', () => {
         });
     }
 
+    async function toggleActiveState(tool) {
+        tool.active = !tool.active;
+        return updateTool(tool);
+    }
+
     async function deleteTool(tool) {
         return api.delete('kitoolbox-tools', tool.id).then(() => records.value.delete(tool.id));
     }
@@ -84,5 +89,6 @@ export const useToolsStore = defineStore('kitoolbox-tools', () => {
         createTool,
         updateTool,
         deleteTool,
+        toggleActiveState,
     };
 });
