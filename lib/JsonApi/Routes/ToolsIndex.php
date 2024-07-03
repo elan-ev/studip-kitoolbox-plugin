@@ -15,12 +15,17 @@ class ToolsIndex extends JsonApiController
     public function __invoke(Request $request, Response $response, $args)
     {
         $user = $this->getUser($request);
-
+        $isRoot = $GLOBALS['perm']->have_perm('root', $user->id);
         if(!Authority::canIndexTools($user)) {
             throw new AuthorizationFailedException();
         }
         list($offset, $limit) = $this->getOffsetAndLimit();
-        $resources = Tool::findBySQL('1 ORDER BY mkdate LIMIT ? OFFSET ?', [$limit, $offset]);
+        if ($isRoot) {
+            $resources = Tool::findBySQL('1 ORDER BY mkdate LIMIT ? OFFSET ?', [$limit, $offset]);
+        } else {
+            $resources = Tool::findBySQL('active = 1 ORDER BY mkdate LIMIT ? OFFSET ?', [$limit, $offset]);
+        }
+        
 
         return $this->getPaginatedContentResponse($resources, count($resources));
     
