@@ -11,8 +11,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "KIToolbox\\Classes\\": "lib/classes/",
-            "KIToolbox\\Models\\": "lib/models/",
+            "KIToolbox\\classes\\": "lib/classes/",
+            "KIToolbox\\models\\": "lib/models/",
             "KIToolbox\\JsonApi\\": "lib/JsonApi/"
         }
     },

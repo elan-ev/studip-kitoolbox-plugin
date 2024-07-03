@@ -1,9 +1,7 @@
 <?php
 namespace KIToolbox\JsonApi\Schemas;
 
-use KIToolbox\Models\Tool as ToolModel;
 use Neomerx\JsonApi\Contracts\Schema\ContextInterface;
-use Neomerx\JsonApi\Schema\Link;
 
 class Tool extends \JsonApi\Schemas\SchemaProvider
 {

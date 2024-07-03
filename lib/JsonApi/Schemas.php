@@ -7,7 +7,8 @@ trait Schemas
     public function registerSchemas(): array
     {
         return [
-            \KIToolbox\Models\Tool::class => Schemas\Tool::class,
+            \KIToolbox\models\Tool::class => Schemas\Tool::class,
+            \KIToolbox\models\CourseTool::class => Schemas\CourseTool::class,
         ];
     }
 }

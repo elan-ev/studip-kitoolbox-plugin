@@ -4,11 +4,11 @@ namespace KIToolbox\JsonApi\Routes;
 
 use JsonApi\Errors\AuthorizationFailedException;
 use JsonApi\JsonApiController;
-use KIToolbox\models\Tool;
+use KIToolbox\models\CourseTool;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class ToolsIndex extends JsonApiController
+class CourseToolsIndex extends JsonApiController
 {
     protected $allowedPagingParameters = ['offset', 'limit'];
 
@@ -16,13 +16,13 @@ class ToolsIndex extends JsonApiController
     {
         $user = $this->getUser($request);
 
-        if(!Authority::canIndexTools($user)) {
+        if (!Authority::canIndexCourseTools($user)) {
             throw new AuthorizationFailedException();
         }
+
         list($offset, $limit) = $this->getOffsetAndLimit();
-        $resources = Tool::findBySQL('1 ORDER BY mkdate LIMIT ? OFFSET ?', [$limit, $offset]);
+        $resources = CourseTool::findBySQL('1 ORDER BY mkdate LIMIT ? OFFSET ?', [$limit, $offset]);
 
         return $this->getPaginatedContentResponse($resources, count($resources));
-    
     }
 }

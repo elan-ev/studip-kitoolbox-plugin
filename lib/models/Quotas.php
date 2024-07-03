@@ -1,6 +1,6 @@
 <?php
 
-namespace KIToolbox\Models;
+namespace KIToolbox\models;
 
 use SimpleORMap;
 
