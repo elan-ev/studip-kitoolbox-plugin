@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { api } from '../api.js';
+import { useContextStore } from './context';
 
 export const useCourseToolsStore = defineStore('kitoolbox-course-tools', () => {
     const records = ref(new Map());
@@ -58,26 +59,37 @@ export const useCourseToolsStore = defineStore('kitoolbox-course-tools', () => {
             });
     }
 
-    async function createCourseTool(tool) {
-        const { data } = await api.create('kitoolbox-course-tools', tool);
+    async function createCourseTool(courseTool) {
+        const { data } = await api.create('kitoolbox-course-tools', courseTool);
         storeRecord(data);
 
         return data;
     }
 
-    async function updateCourseTool(tool) {
-        return api.patch('kitoolbox-course-tools', { id: tool.id, ...tool }).then(() => {
-            fetchById(tool.id);
+    async function updateCourseTool(courseTool) {
+        return api.patch('kitoolbox-course-tools', { id: courseTool.id, ...courseTool }).then(() => {
+            fetchById(courseTool.id);
         });
     }
 
     async function toggleActiveState(tool) {
-        tool.active = !tool.active;
-        return updateCourseTool(tool);
+        let courseTool = tool['course-tool'];
+        if (Boolean(courseTool)) {
+            courseTool.active = !courseTool.active;
+            return updateCourseTool(courseTool);
+        } else {
+            const contextStore = useContextStore();
+            courseTool = {
+                'tool-id': tool['id'],
+                'course-id': contextStore.cid,
+            };
+
+            return createCourseTool(courseTool);
+        }
     }
 
-    async function deleteCourseTool(tool) {
-        return api.delete('kitoolbox-course-tools', tool.id).then(() => records.value.delete(tool.id));
+    async function deleteCourseTool(courseTool) {
+        return api.delete('kitoolbox-course-tools', courseTool.id).then(() => records.value.delete(courseTool.id));
     }
 
     return {

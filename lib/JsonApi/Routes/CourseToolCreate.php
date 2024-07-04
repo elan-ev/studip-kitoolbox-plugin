@@ -66,8 +66,8 @@ class CourseToolCreate extends JsonApiController
 
     private function getCourse($json): ?\Course
     {
-        $CourseData = self::arrayGet($json, 'data.relationships.course.data');
+        $CourseId = self::arrayGet($json, 'data.attributes.course-id');
 
-        return \Course::find($CourseData->id);
+        return \Course::find($CourseId);
     }
 }

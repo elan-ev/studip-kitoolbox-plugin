@@ -17,17 +17,17 @@ const tools = computed(() => {
 
     return tools.map((tool) => {
         const courseTool = courseTools.value.find((course_tool) => {
-            return course_tool['tool-id'] == tool.id // yes '==' the one is an int the other a string
+            return course_tool['tool-id'] == tool.id; // yes '==' the one is an int the other a string
         });
         tool['active-in-course'] = Boolean(courseTool && courseTool?.active);
-
+        tool['course-tool'] = courseTool;
         return tool;
-   });
+    });
 });
 
 const courseTools = computed(() => {
     let tools = courseToolsStore.all;
-    if (!isTeacher) {
+    if (!props.editMode) {
         return tools.filter((tool) => tool.active);
     }
     return tools;
@@ -36,15 +36,30 @@ const courseTools = computed(() => {
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
 });
+
+const toolList = computed(() => {
+    if (props.editMode) {
+        return tools.value;
+    }
+
+    return courseTools.value;
+});
 </script>
 
 <template>
-    <h1>toolbox list</h1>
-    <h2 v-if="editMode">EDIT MODE</h2>
-    <ul v-if="editMode">
-        <li v-for="tool in tools" :key="tool"><ToolItem :tool="tool" :editMode="editMode" /></li>
-    </ul>
-    <ul v-else>
-        <li v-for="tool in courseTools" :key="tool"><ToolItem :tool="tool" :editMode="editMode" /></li>
+    <ul class="kit-tool-list">
+        <li v-for="tool in toolList" :key="tool.id">
+            <ToolItem :tool="tool" :editMode="editMode" />
+        </li>
     </ul>
 </template>
+
+<style lang="scss">
+.kit-tool-list {
+    list-style: none;
+    padding: 0;
+    li {
+        margin-bottom: 20px;
+    }
+}
+</style>

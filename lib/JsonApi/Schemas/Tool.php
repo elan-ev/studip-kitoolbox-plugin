@@ -23,6 +23,8 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'url'           => (string) $resource['url'],
             'active'        => (bool) $resource['active'],
             'max-quota'     => (int) $resource['max_quota'],
+
+            'preview'       => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['id'],
         ];
 
         if ($isRoot) {

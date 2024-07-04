@@ -19,6 +19,9 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
     public function getAttributes($resource, ContextInterface $context): iterable
     {
         return [
+            'name'              => (string) $resource['tool']['name'],
+            'description'       => (string) $resource['tool']['description'],
+            'preview'           => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['tool']['id'],
             'tool-id'           => (int) $resource['tool_id'],
             'course-id'         => (int) $resource['course_id'],
             'active'            => (bool) $resource['active'],
