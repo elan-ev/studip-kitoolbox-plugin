@@ -1,6 +1,8 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, ref } from 'vue';
 import { useCourseToolsStore } from './../../stores/course-tools';
+import StudipIcon from '../studip/StudipIcon.vue';
+import StudipDialog from '../studip/StudipDialog.vue';
 
 const courseToolsStore = useCourseToolsStore();
 
@@ -8,6 +10,9 @@ const props = defineProps({
     tool: Object,
     editMode: Boolean,
 });
+
+const openEditDialog = ref(false);
+const toolClone = ref(null);
 
 const editModeHighlight = computed(() => {
     if (props.editMode) {
@@ -17,28 +22,69 @@ const editModeHighlight = computed(() => {
 
 const toggleActiveState = (tool) => {
     courseToolsStore.toggleActiveState(tool);
-}
+};
 
-onMounted(() => {
-    // console.log(props.tool);
-});
+const updateShowEditDialog = (state) => {
+    openEditDialog.value = state;
+};
+
+const showEditTool = () => {
+    toolClone.value = JSON.parse(JSON.stringify(props.tool['course-tool']));
+    updateShowEditDialog(true);
+};
+
+const storeTool = () => {
+    updateShowEditDialog(false);
+    courseToolsStore.updateCourseTool(toolClone.value);
+};
 </script>
 
 <template>
     <article class="kit-tool-item" :class="editModeHighlight">
         <header class="kit-tool-item-head">
-            <input v-if="editMode" type="checkbox" :checked="tool['active-in-course']" @change="toggleActiveState(tool)" />
+            <input
+                v-if="editMode"
+                type="checkbox"
+                :checked="tool['active-in-course']"
+                @change="toggleActiveState(tool)"
+            />
             <h2>{{ tool.name }}</h2>
+            <button v-if="editMode" @click="showEditTool"><StudipIcon shape="admin" /></button>
         </header>
         <div class="kit-tool-item-body">
             <img :src="tool.preview" />
             <p>{{ tool.description }}</p>
         </div>
     </article>
+    <StudipDialog
+        :height="400"
+        :open="openEditDialog"
+        confirm-class="accept"
+        :confirm-text="$gettext('Speichern')"
+        :close-text="$gettext('Abbrechen')"
+        :title="$gettext('Einstellungen')"
+        @update:open="updateShowEditDialog"
+        @confirm="storeTool"
+    >
+        <template #dialogContent>
+            <form class="default">
+                <label>
+                    {{ $gettext('Maximale Anzahl Tokens') }}
+                    <input type="number" min="0" v-model="toolClone['max-tokens']" />
+                </label>
+                <label>
+                    {{ $gettext('Tokens pro Nutzendem') }}
+                    <input type="number" min="0" v-model="toolClone['tokens-per-user']" />
+                </label>
+            </form>
+        </template>
+    </StudipDialog>
 </template>
 
 <style lang="scss">
 .kit-tool-item {
+    max-width: 870px;
+
     &.active-item,
     &.inactive-item {
         padding: 0 10px 2px 10px;
@@ -54,13 +100,25 @@ onMounted(() => {
     }
 
     .kit-tool-item-head {
+        position: relative;
+        margin-bottom: 16px;
+        padding-bottom: 4px;
+        border-bottom: solid thin var(--dark-gray-color-20);
+
         input {
             margin-right: 10px;
         }
         h2 {
             display: inline-block;
             margin-top: 0;
-            margin-bottom: 16px;
+            margin-bottom: 0;
+        }
+        button {
+            position: absolute;
+            right: 0;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
         }
     }
 

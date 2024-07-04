@@ -59,7 +59,7 @@ const toolList = computed(() => {
     list-style: none;
     padding: 0;
     li {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
     }
 }
 </style>
