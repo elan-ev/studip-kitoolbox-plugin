@@ -46,10 +46,11 @@ const storeTool = () => {
                 v-if="editMode"
                 type="checkbox"
                 :checked="tool['active-in-course']"
+                :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
                 @change="toggleActiveState(tool)"
             />
             <h2>{{ tool.name }}</h2>
-            <button v-if="editMode" @click="showEditTool"><StudipIcon shape="admin" /></button>
+            <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')"><StudipIcon shape="admin" /></button>
         </header>
         <div class="kit-tool-item-body">
             <img :src="tool.preview" />
@@ -57,7 +58,7 @@ const storeTool = () => {
         </div>
     </article>
     <StudipDialog
-        :height="400"
+        :height="300"
         :open="openEditDialog"
         confirm-class="accept"
         :confirm-text="$gettext('Speichern')"
