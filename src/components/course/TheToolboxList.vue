@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import ToolItem from './ToolItem.vue';
+import EmptyTeaser from './EmptyTeaser.vue';
 import { useToolsStore } from './../../stores/tools';
 import { useCourseToolsStore } from './../../stores/course-tools';
 import { useContextStore } from './../../stores/context';
@@ -44,6 +45,10 @@ const toolList = computed(() => {
 
     return courseTools.value;
 });
+
+const showTeaser = computed(() => {
+    return !props.editMode && courseTools.value.length === 0;
+});
 </script>
 
 <template>
@@ -52,6 +57,7 @@ const toolList = computed(() => {
             <ToolItem :tool="tool" :editMode="editMode" />
         </li>
     </ul>
+    <EmptyTeaser v-show="showTeaser" @switch-mode-edit="$emit('switch-mode-edit')"/>
 </template>
 
 <style lang="scss">

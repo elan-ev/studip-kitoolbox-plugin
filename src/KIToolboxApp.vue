@@ -36,7 +36,7 @@ onBeforeMount(async () => {
 });
 </script>
 <template>
-    <TheToolboxList :editMode="editView" />
+    <TheToolboxList :editMode="editView" @switch-mode-edit="switchView('edit')"/>
     <Teleport to="#ki-toolbox-view-widget .sidebar-views">
         <li :class="{ active: studentView }">
             <button type="button" @click="switchView('student')">
