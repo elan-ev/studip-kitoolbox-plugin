@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import TheToolboxList from './components/course/TheToolboxList.vue';
 import { useToolsStore } from './stores/tools';
 import { useCourseToolsStore } from './stores/course-tools';
@@ -41,6 +41,13 @@ onBeforeMount(async () => {
         toolsStore.fetchTools();
     }
 });
+
+onBeforeUnmount(() => {
+    if (courseToolInterval?.value) {
+        clearInterval(courseToolInterval.value);
+    }
+});
+
 </script>
 <template>
     <TheToolboxList :editMode="editView" @switch-mode-edit="switchView('edit')"/>
