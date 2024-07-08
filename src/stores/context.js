@@ -4,6 +4,7 @@ import { api } from '../api.js';
 
 export const useContextStore = defineStore('kitoolbox-context', () => {
     const isTeacher = ref(false);
+    const appLoaded = ref(false);
 
     const cid = computed(() => {
         return window.STUDIP.URLHelper.parameters.cid;
@@ -12,6 +13,10 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
     const userId = computed(() => {
         return window.STUDIP.USER_ID;
     });
+
+    function setAppLoaded(val) {
+        appLoaded.value = val;
+    }
 
     async function fetchCourseMembership() {
         return api
@@ -57,6 +62,8 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         isTeacher,
         cid,
         userId,
+        appLoaded,
+        setAppLoaded,
         getTeacherStatus,
     };
 });

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
 import TheToolboxList from './components/course/TheToolboxList.vue';
+import StudipProgressIndicator from './components/studip/StudipProgressIndicator.vue';
 import { useToolsStore } from './stores/tools';
 import { useCourseToolsStore } from './stores/course-tools';
 import { useContextStore } from './stores/context';
@@ -28,18 +29,22 @@ const switchView = (view) => {
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
 });
+const appLoaded = computed(() => {
+    return contextStore.appLoaded;
+});
 
 onBeforeMount(async () => {
     await contextStore.getTeacherStatus();
 
-    courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    await courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    if (isTeacher) {
+        await toolsStore.fetchTools();
+    }
+    contextStore.setAppLoaded(true);
+
     courseToolInterval.value = setInterval(() => {
         courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
     }, 14000);
-
-    if (isTeacher) {
-        toolsStore.fetchTools();
-    }
 });
 
 onMounted(() => {
@@ -54,17 +59,22 @@ onBeforeUnmount(() => {
 
 </script>
 <template>
-    <TheToolboxList :editMode="editView" @switch-mode-edit="switchView('edit')"/>
-    <Teleport to="#ki-toolbox-view-widget .sidebar-views">
-        <li :class="{ active: studentView }">
-            <button type="button" @click="switchView('student')">
-                {{ $gettext('Studierendenansicht') }}
-            </button>
-        </li>
-        <li :class="{ active: editView }">
-            <button type="button" @click="switchView('edit')">
-                {{ $gettext('Bearbeitungsansicht') }}
-            </button>
-        </li>
-    </Teleport>
+    <template v-if="appLoaded">
+        <TheToolboxList :editMode="editView" @switch-mode-edit="switchView('edit')"/>
+        <Teleport to="#ki-toolbox-view-widget .sidebar-views">
+            <li :class="{ active: studentView }">
+                <button type="button" @click="switchView('student')">
+                    {{ $gettext('Studierendenansicht') }}
+                </button>
+            </li>
+            <li :class="{ active: editView }">
+                <button type="button" @click="switchView('edit')">
+                    {{ $gettext('Bearbeitungsansicht') }}
+                </button>
+            </li>
+        </Teleport>
+    </template>
+    <template v-else>
+        <StudipProgressIndicator :description="$gettext('Lade Tools...')"/>
+    </template>
 </template>
