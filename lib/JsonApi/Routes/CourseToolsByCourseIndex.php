@@ -29,6 +29,9 @@ class CourseToolsByCourseIndex extends JsonApiController
         list($offset, $limit) = $this->getOffsetAndLimit();
         $resources = CourseTool::findBySQL('course_id = ? ORDER BY mkdate LIMIT ? OFFSET ?', [$course->id, $limit, $offset]);
         $resources = array_filter($resources, function($course_tool) {
+            if (!$course_tool->tool) {
+                return false;
+            }
             return $course_tool->tool->active;
         });
 
