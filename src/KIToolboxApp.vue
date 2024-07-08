@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import TheToolboxList from './components/course/TheToolboxList.vue';
 import { useToolsStore } from './stores/tools';
 import { useCourseToolsStore } from './stores/course-tools';
@@ -11,6 +11,8 @@ const courseToolsStore = useCourseToolsStore();
 
 const studentView = ref(true);
 const editView = ref(false);
+
+const courseToolInterval = ref(null);
 
 const switchView = (view) => {
     if (view === 'student') {
@@ -29,11 +31,23 @@ const isTeacher = computed(() => {
 
 onBeforeMount(async () => {
     await contextStore.getTeacherStatus();
+
     courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    courseToolInterval.value = setInterval(() => {
+        courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    }, 14000);
+
     if (isTeacher) {
         toolsStore.fetchTools();
     }
 });
+
+onBeforeUnmount(() => {
+    if (courseToolInterval?.value) {
+        clearInterval(courseToolInterval.value);
+    }
+});
+
 </script>
 <template>
     <TheToolboxList :editMode="editView" @switch-mode-edit="switchView('edit')"/>

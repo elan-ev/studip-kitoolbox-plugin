@@ -13,10 +13,12 @@
         "psr-4": {
             "KIToolbox\\classes\\": "lib/classes/",
             "KIToolbox\\models\\": "lib/models/",
-            "KIToolbox\\JsonApi\\": "lib/JsonApi/"
+            "KIToolbox\\JsonApi\\": "lib/JsonApi/",
+            "KIToolbox\\JWT\\": "lib/JWT/"
         }
     },
     "require": {
-        "php": "^7.0 || ^8.0"
+        "php": "^7.0 || ^8.0",
+        "lcobucci/jwt": "4.0.4"
     }
 }

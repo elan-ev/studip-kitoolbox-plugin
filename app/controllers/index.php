@@ -1,8 +1,11 @@
 <?php
 
+use KIToolbox\JWT\JWTHandler;
+use KIToolbox\models\CourseTool;
+
 class IndexController extends StudipController
 {
-    
+
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
@@ -17,7 +20,7 @@ class IndexController extends StudipController
             $this->buildSidebar();
             $this->getHelpbarContent();
         }
-        
+
     }
 
     private function buildSidebar()
@@ -37,5 +40,41 @@ class IndexController extends StudipController
     {
         $description = 'Lorem ipsum';
         Helpbar::get()->addPlainText('', $description, '');
+    }
+
+    public function redirect_action()
+    {
+        PageLayout::setBodyElementId('kitoolbar-index');
+        PageLayout::setTitle('KI-Toolbox');
+        $cid = Request::get('cid') ?? Context::getId();
+        $validated = false;
+        if ($token = Request::get('token')) {
+            $validated = JWTHandler::validateRefreshToken($token, $cid);
+        }
+
+        if ($validated) {
+            $ktcid = JWTHandler::getClaims($token, 'ktcid');
+            $courseTool = CourseTool::find($ktcid);
+            if ($courseTool && !empty($courseTool->tool->url)) {
+                $issuedToken = (new JWTHandler($courseTool))->issueToolToken();
+                $toolUrl = $courseTool->tool->url;
+                // session_start();
+                // $_SESSION['token'] = $issuedToken;
+                setcookie(
+                    'token',
+                    $issuedToken,
+                    0,
+                    '/',
+                    $toolUrl,
+                    true,
+                    true
+                );
+                // header('Set-Cookie: name=token; Secure; Path=/; SameSite=None; Partitioned;');
+                header('Location:' . $toolUrl);
+                die;
+            }
+        }
+        PageLayout::postError("Zugriff abgelehnt! Bitte versuche es erneut.");
+        $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
     }
 }
