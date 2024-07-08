@@ -31,7 +31,7 @@ class IndexController extends StudipController
             $sidebar = Sidebar::get();
             $views = new ViewsWidget();
             $views->setId('ki-toolbox-view-widget');
-            $views->addLink('','',null, '');
+            $views->addLink('','',null, ['view-dummy-item' => true]);
             $sidebar->addWidget($views);
         }
     }

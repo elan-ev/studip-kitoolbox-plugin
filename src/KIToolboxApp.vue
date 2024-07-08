@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
+import { computed, ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
 import TheToolboxList from './components/course/TheToolboxList.vue';
 import { useToolsStore } from './stores/tools';
 import { useCourseToolsStore } from './stores/course-tools';
@@ -40,6 +40,10 @@ onBeforeMount(async () => {
     if (isTeacher) {
         toolsStore.fetchTools();
     }
+});
+
+onMounted(() => {
+    const listItem = window.document.querySelectorAll("[view-dummy-item]")[0].parentElement.remove();
 });
 
 onBeforeUnmount(() => {
