@@ -41,6 +41,11 @@ const storeTool = () => {
 
 <template>
     <article class="kit-tool-item" :class="editModeHighlight">
+        <a
+            v-if="!editMode && tool?.jwt"
+            class="kit-tool-item-anchor"
+            :href="tool.jwt"
+        />
         <header class="kit-tool-item-head">
             <input
                 v-if="editMode"
@@ -85,6 +90,7 @@ const storeTool = () => {
 <style lang="scss">
 .kit-tool-item {
     max-width: 870px;
+    position: relative;
 
     &.active-item,
     &.inactive-item {
@@ -134,6 +140,15 @@ const storeTool = () => {
         p {
             max-width: 540px;
         }
+    }
+
+    .kit-tool-item-anchor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
     }
 }
 </style>

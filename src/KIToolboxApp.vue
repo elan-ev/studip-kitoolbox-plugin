@@ -12,6 +12,8 @@ const courseToolsStore = useCourseToolsStore();
 const studentView = ref(true);
 const editView = ref(false);
 
+const courseToolInterval = ref(null);
+
 const switchView = (view) => {
     if (view === 'student') {
         studentView.value = true;
@@ -29,7 +31,12 @@ const isTeacher = computed(() => {
 
 onBeforeMount(async () => {
     await contextStore.getTeacherStatus();
+
     courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    courseToolInterval.value = setInterval(() => {
+        courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    }, 14000);
+
     if (isTeacher) {
         toolsStore.fetchTools();
     }

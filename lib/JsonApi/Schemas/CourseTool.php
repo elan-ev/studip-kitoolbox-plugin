@@ -3,6 +3,7 @@ namespace KIToolbox\JsonApi\Schemas;
 
 use Neomerx\JsonApi\Contracts\Schema\ContextInterface;
 use Neomerx\JsonApi\Schema\Link;
+use KIToolbox\JWT\JWTHandler;
 
 class CourseTool extends \JsonApi\Schemas\SchemaProvider
 {
@@ -26,7 +27,8 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
             'course-id'         => (int) $resource['course_id'],
             'active'            => (bool) $resource['active'],
             'max-tokens'        => (string) $resource['max_tokens'],
-            'tokens-per-user'   => (int) $resource['tokens_per_user']
+            'tokens-per-user'   => (int) $resource['tokens_per_user'],
+            'jwt'               => (string) (new JWTHandler($resource))->generateRefreshTokenUrl()
         ];
     }
 
