@@ -37,31 +37,32 @@ const storeTool = () => {
     updateShowEditDialog(false);
     courseToolsStore.updateCourseTool(toolClone.value);
 };
+
+const showJWTLink = computed(() => {
+    return !props.editMode && Boolean(props.tool?.jwt);
+});
 </script>
 
 <template>
-    <article class="kit-tool-item" :class="editModeHighlight">
-        <a
-            v-if="!editMode && tool?.jwt"
-            class="kit-tool-item-anchor"
-            :href="tool.jwt"
-        />
-        <header class="kit-tool-item-head">
-            <input
-                v-if="editMode"
-                type="checkbox"
-                :checked="tool['active-in-course']"
-                :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
-                @change="toggleActiveState(tool)"
-            />
-            <h2>{{ tool.name }}</h2>
-            <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')"><StudipIcon shape="admin" /></button>
-        </header>
-        <div class="kit-tool-item-body">
-            <img :src="tool.preview" />
-            <p>{{ tool.description }}</p>
-        </div>
-    </article>
+    <component :is="showJWTLink ? 'a' : 'div'" :href="showJWTLink ? tool.jwt : null" :target="showJWTLink ? '_blank' : null ">
+        <article class="kit-tool-item" :class="editModeHighlight">
+            <header class="kit-tool-item-head">
+                <input
+                    v-if="editMode"
+                    type="checkbox"
+                    :checked="tool['active-in-course']"
+                    :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
+                    @change="toggleActiveState(tool)"
+                />
+                <h2>{{ tool.name }}</h2>
+                <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')"><StudipIcon shape="admin" /></button>
+            </header>
+            <div class="kit-tool-item-body">
+                <img :src="tool.preview" aria-hidden="true"/>
+                <p>{{ tool.description }}</p>
+            </div>
+        </article>
+    </component>
     <StudipDialog
         :height="300"
         :open="openEditDialog"
@@ -119,6 +120,7 @@ const storeTool = () => {
             display: inline-block;
             margin-top: 0;
             margin-bottom: 0;
+            color: unset;
         }
         button {
             position: absolute;
