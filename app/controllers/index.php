@@ -56,8 +56,14 @@ class IndexController extends StudipController
             $ktcid = JWTHandler::getClaims($token, 'ktcid');
             $courseTool = CourseTool::find($ktcid);
             if ($courseTool && !empty($courseTool->tool->url)) {
+                
                 $issuedToken = (new JWTHandler($courseTool))->issueToolToken();
                 $toolUrl = $courseTool->tool->url;
+                if (!filter_var($toolUrl, FILTER_VALIDATE_URL)) {
+                    PageLayout::postError(_("URL nicht zulässig! Bitte wenden Sie sich an Ihren Administrator."));
+                    $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
+                    return;
+                }
                 // session_start();
                 // $_SESSION['token'] = $issuedToken;
                 setcookie(
@@ -74,7 +80,7 @@ class IndexController extends StudipController
                 die;
             }
         }
-        PageLayout::postError("Zugriff abgelehnt! Bitte versuche es erneut.");
+        PageLayout::postError(_("Zugriff abgelehnt! Bitte versuche es erneut."));
         $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
     }
 }
