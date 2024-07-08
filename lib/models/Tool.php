@@ -26,6 +26,13 @@ class Tool extends SimpleORMap
     {
         $config['db_table'] = 'kit_tools';
 
+        $config['registered_callbacks']['before_delete'][] = 'cbBeforeDelete';
+
         parent::configure($config);
+    }
+
+    protected function cbBeforeDelete()
+    {
+        CourseTool::deleteBySQL('tool_id = ?', [$this->id]);
     }
 }
