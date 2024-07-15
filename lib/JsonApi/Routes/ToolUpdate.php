@@ -60,6 +60,14 @@ class ToolUpdate extends JsonApiController
             $resource->url = $json['data']['attributes']['url'];
         }
 
+        if (isset($json['data']['attributes']['key'])) {
+            $resource->jwt_key = $json['data']['attributes']['key'];
+        }
+
+        if (isset($json['data']['attributes']['max-quota'])) {
+            $resource->max_quota = $json['data']['attributes']['max-quota'];
+        }
+
         if (isset($json['data']['attributes']['active'])) {
             $resource->active = $json['data']['attributes']['active'];
         }

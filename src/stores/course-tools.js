@@ -41,9 +41,10 @@ export const useCourseToolsStore = defineStore('kitoolbox-course-tools', () => {
     async function fetchCourseToolsByCourse(cid) {
         isLoading.value = true;
         return api
-            .fetch(`courses/${cid}/kitoolbox-course-tools`, {
+            .get(`courses/${cid}/kitoolbox-course-tools`, {
                 params: {
-                    'page[limit]': 100,
+                    'page[limit]': 1000,
+                    'include': 'quotas,tool'
                 },
             })
             .then(({ data }) => {

@@ -18,44 +18,8 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         appLoaded.value = val;
     }
 
-    async function fetchCourseMembership() {
-        return api
-            .fetch(`users/${userId.value}/course-memberships`)
-            .then(({ data }) => {
-                return data.length > 0 ? data[0] : null;
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }
-
-    async function fetchCurrentUser() {
-        return api
-            .fetch(`users/${userId.value}`)
-            .then(({ data }) => {
-                return data;
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }
-
-    async function getTeacherStatus() {
-        const member = await fetchCourseMembership();
-        if (member !== null) {
-            const perm = member.permission;
-            if (perm === 'dozent' || perm === 'tutor') {
-                isTeacher.value = true;
-                return;
-            }
-        } else {
-            const user = await fetchCurrentUser();
-            const perm = user.permission;
-            if (perm === 'root') {
-                isTeacher.value = true;
-                return;
-            }
-        }
+    function setTeacherStatus(val) {
+        isTeacher.value = val;
     }
 
     return {
@@ -64,6 +28,6 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         userId,
         appLoaded,
         setAppLoaded,
-        getTeacherStatus,
+        setTeacherStatus,
     };
 });

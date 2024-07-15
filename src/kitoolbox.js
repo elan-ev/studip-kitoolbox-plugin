@@ -3,6 +3,7 @@ import App from './KIToolboxApp.vue'
 import { createGettext } from 'vue3-gettext';
 import translations from './locales/translations.json';
 import { createPinia } from 'pinia';
+import { useContextStore } from './stores/context';
 
 const app = createApp(App);
 
@@ -18,5 +19,12 @@ app.use(gettext);
 
 const pinia = createPinia();
 app.use(pinia);
+
+const elem = document.getElementById('kitoolbox-app');
+const contextStore = useContextStore();
+if (elem.attributes['is-teacher'] !== undefined) {
+  const isTeacher = JSON.parse(elem.attributes['is-teacher'].value);
+  contextStore.setTeacherStatus(isTeacher);
+}
 
 app.mount('#kitoolbox-app');

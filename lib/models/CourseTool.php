@@ -16,7 +16,8 @@ use SimpleORMap;
  * @property bool $active database column
  * @property int $max_tokens database column
  * @property int $tokens_per_user database column
- * @property Tool $container belongs_to Tool
+ * @property Tool $tool belongs_to Tool
+ * @property Quota $quotas has_many Quota
  **/
 
 class CourseTool extends SimpleORMap
@@ -37,6 +38,44 @@ class CourseTool extends SimpleORMap
             'assoc_foreign_key' => 'seminar_id',
         ];
 
+        $config['has_many']['quotas'] = [
+            'class_name' => Quota::class,
+            'foreign_key' => 'id',
+            'assoc_foreign_key' => 'course_tool_id',
+        ];
+
+        $config['registered_callbacks']['before_delete'][] = 'cbBeforeDelete';
+
         parent::configure($config);
+    }
+
+    protected function cbBeforeDelete()
+    {
+        Quota::deleteBySQL('course_tool_id = ?', [$this->id]);
+    }
+
+    public function maxTokensUnlimited()
+    {
+        return $this->max_tokens === -1;
+    }
+
+    public function tokensPerUserUnlimited()
+    {
+        return $this->tokens_per_user === -1;
+    }
+
+    public function tokenLimitReached($user_id)
+    {
+        $quotas = Quota::findBySQL('course_tool_id = ?', [$this->id]);
+
+        $toolTokensLeft = $this->maxTokensUnlimited() || $this->max_tokens > count($quotas);
+
+        $user_quotas = array_filter($quotas, function($quota) use ($user_id) {
+            return $quota->user_id === $user_id;
+        });
+
+        $personalTokensLeft = $this->tokensPerUserUnlimited() || $this->tokens_per_user > count($user_quotas);
+
+        return !($toolTokensLeft || $personalTokensLeft);
     }
 }

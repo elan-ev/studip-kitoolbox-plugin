@@ -34,8 +34,6 @@ const appLoaded = computed(() => {
 });
 
 onBeforeMount(async () => {
-    await contextStore.getTeacherStatus();
-
     await courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
     if (isTeacher) {
         await toolsStore.fetchTools();
@@ -48,7 +46,10 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
-    const listItem = window.document.querySelectorAll("[view-dummy-item]")[0].parentElement.remove();
+    const listItem = window.document.querySelectorAll("[view-dummy-item]")[0];
+    if (listItem) {
+        listItem.parentElement.remove();
+    }
 });
 
 onBeforeUnmount(() => {

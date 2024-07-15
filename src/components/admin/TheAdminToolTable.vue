@@ -58,8 +58,11 @@ const toggleActiveState = (tool) => {
 
 const initNewTool = () => {
     newTool.value = {
+        name: '',
+        description: '',
         url: '',
         key: '',
+        'max-quota': 0
     };
 };
 const showCreateTool = () => {
@@ -122,14 +125,14 @@ const createTool = () => {
                         {{ tool.description }}
                     </td>
                     <td>
-                        {{ tool['supported-quota'] }}
+                        {{ tool['quota-type'] }}
                     </td>
                     <td>
                         {{ tool['max-quota'] }}
                     </td>
                     <td class="actions">
                         <studip-action-menu
-                            :context="$gettext('Snapshot')"
+                            :context="$gettext('KI-Tool')"
                             :items="[
                                 {
                                     id: 1,
@@ -180,7 +183,7 @@ const createTool = () => {
         >
         </studip-dialog>
         <studip-dialog
-            :height="350"
+            :height="550"
             :open="openEditDialog"
             confirm-class="accept"
             :confirm-text="$gettext('Speichern')"
@@ -203,11 +206,19 @@ const createTool = () => {
                         {{ $gettext('Beschreibung') }}
                         <textarea v-model="currentTool.description"></textarea>
                     </label>
+                    <label>
+                        {{ $gettext('Key') }}
+                        <input type="text" v-model="currentTool['key']" />
+                    </label>
+                    <label>
+                        {{ $gettext('Max Quota') }}
+                        <input type="text" v-model="currentTool['max-quota']" />
+                    </label>
                 </form>
             </template>
         </studip-dialog>
         <studip-dialog
-            :height="350"
+            :height="550"
             :open="openCreateDialog"
             confirm-class="accept"
             :confirm-text="$gettext('Hinzufügen')"
@@ -223,8 +234,20 @@ const createTool = () => {
                         <input type="url" v-model="newTool.url" />
                     </label>
                     <label>
+                        {{ $gettext('Titel') }}
+                        <input type="text" v-model="newTool.name" />
+                    </label>
+                    <label>
+                        {{ $gettext('Beschreibung') }}
+                        <textarea v-model="newTool.description"></textarea>
+                    </label>
+                    <label>
                         {{ $gettext('Key') }}
                         <input type="text" v-model="newTool.key" />
+                    </label>
+                    <label>
+                        {{ $gettext('Max Quota') }}
+                        <input type="text" v-model="newTool['max-quota']" />
                     </label>
                 </form>
             </template>

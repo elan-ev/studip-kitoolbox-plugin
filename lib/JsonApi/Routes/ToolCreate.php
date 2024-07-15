@@ -39,6 +39,15 @@ class ToolCreate extends JsonApiController
         if (!self::arrayHas($json, 'data.attributes.url')) {
             return 'New document must not have an `url`.';
         }
+        if (!self::arrayHas($json, 'data.attributes.name')) {
+            return 'New document must not have an `name`.';
+        }
+        if (!self::arrayHas($json, 'data.attributes.description')) {
+            return 'New document must not have an `description`.';
+        }
+        if (!self::arrayHas($json, 'data.attributes.max-quota')) {
+            return 'New document must not have an `max-quota`.';
+        }
     }
 
     private function createTool(array $json): Tool
@@ -46,16 +55,16 @@ class ToolCreate extends JsonApiController
         $key = self::arrayGet($json, 'data.attributes.key', '');
         $url = self::arrayGet($json, 'data.attributes.url', '');
 
-        //TODO: get name, description, max_quota from tool url
-        $name = 'dummy';
-        $description= 'lorem ipsum';
-        $max_quota = 42;
+        $name = self::arrayGet($json, 'data.attributes.name', '');
+        $description= self::arrayGet($json, 'data.attributes.description', '');
+        $max_quota = self::arrayGet($json, 'data.attributes.max-quota', '');
 
         $tool = Tool::create([
             'name' => $name,
             'description' => $description,
             'jwt_key' => $key,
             'url' => $url,
+            'quota_type' => 'token',
             'max_quota' => $max_quota
         ]);
 

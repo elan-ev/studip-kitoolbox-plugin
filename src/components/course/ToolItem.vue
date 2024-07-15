@@ -1,10 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useCourseToolsStore } from './../../stores/course-tools';
+import { useContextStore } from './../../stores/context';
 import StudipIcon from '../studip/StudipIcon.vue';
 import StudipDialog from '../studip/StudipDialog.vue';
 
 const courseToolsStore = useCourseToolsStore();
+const contextStore = useContextStore();
 
 const props = defineProps({
     tool: Object,
@@ -16,6 +18,9 @@ const toolClone = ref(null);
 
 const editModeHighlight = computed(() => {
     if (props.editMode) {
+        if (toolTokenLimitReached.value) {
+            return 'warning-item'
+        }
         return props.tool['active-in-course'] ? 'active-item' : 'inactive-item';
     }
 });
@@ -38,13 +43,67 @@ const storeTool = () => {
     courseToolsStore.updateCourseTool(toolClone.value);
 };
 
+const setUnlimited = (field) => {
+    if (field === 'max-tokens') {
+        toolClone.value['max-tokens'] = maxTokensUnlimited.value ? 0 : -1;
+    }
+    if (field === 'tokens-per-user') {
+        toolClone.value['tokens-per-user'] = tokensPerUserUnlimited.value ? 0 : -1;
+    }
+}
+
+const maxTokensUnlimited = computed( () => {
+    return toolClone.value['max-tokens'] === -1;
+});
+
+const tokensPerUserUnlimited = computed( () => {
+    return toolClone.value['tokens-per-user'] === -1;
+});
+
 const showJWTLink = computed(() => {
     return !props.editMode && Boolean(props.tool?.jwt);
+});
+
+const quotas = computed(() => {
+    return props.tool.quotas?.data;
+});
+
+const userQuotas = computed(() => {
+    return quotas.value.filter((quota) =>  quota.user.data.id === contextStore.userId);
+});
+
+const toolTokenLimit = computed(() => {
+    if (props.tool['max-tokens-unlimited'] || quotas === undefined) {
+        return null;
+    }
+    return props.tool['max-tokens'] - quotas.value.length;
+});
+
+const userTokenLimit = computed(() => {
+    if (props.tool['tokens-per-user-unlimited']) {
+        return null;
+    }
+
+    return props.tool['tokens-per-user'] - userQuotas.value.length;
+});
+
+const toolTokenLimitReached = computed(()=> {
+    const tool = props.tool.tool?.data ?? props.tool;
+
+    return tool['max-quota'] <= tool['used-tokens'];
+});
+
+const itemAvailable = computed(() => {
+    if (contextStore.isTeacher) {
+        return true;
+    }
+    
+    return userTokenLimit.value !== 0 && toolTokenLimit.value !== 0 && !toolTokenLimitReached.value;
 });
 </script>
 
 <template>
-    <component :is="showJWTLink ? 'a' : 'div'" :href="showJWTLink ? tool.jwt : null" :target="showJWTLink ? '_blank' : null ">
+    <component :is="showJWTLink && itemAvailable ? 'a' : 'div'" :href="showJWTLink ? tool.jwt : null" :target="showJWTLink ? '_blank' : null ">
         <article class="kit-tool-item" :class="editModeHighlight">
             <header class="kit-tool-item-head">
                 <input
@@ -56,6 +115,18 @@ const showJWTLink = computed(() => {
                 />
                 <h2>{{ tool.name }}</h2>
                 <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')"><StudipIcon shape="admin" /></button>
+                <div v-if="!editMode && !toolTokenLimitReached" class="kit-token-info">
+                    <span v-if="toolTokenLimit !== null" :class="{'kit-token-warning': toolTokenLimit <= 0}"> 
+                        {{ $gettext('Übrige Tokens') + ': ' + toolTokenLimit }}
+                    </span> 
+                    <span v-if="!contextStore.isTeacher &&userTokenLimit !== null" :class="{'kit-token-warning': userTokenLimit <= 0}">
+                        <span v-if="toolTokenLimit !== null" class="seperator"> | </span>
+                        {{ $gettext('Ihre restlichen Tokens') + ': ' + userTokenLimit }}
+                    </span>
+                </div>
+                <div v-if="toolTokenLimitReached" :class="{'kit-token-info' : !editMode}">
+                    <span class="kit-token-warning">{{ $gettext('Die Tokens für dieses Tool sind verbraucht!') }}</span>
+                </div>
             </header>
             <div class="kit-tool-item-body">
                 <img :src="tool.preview" aria-hidden="true"/>
@@ -64,7 +135,7 @@ const showJWTLink = computed(() => {
         </article>
     </component>
     <StudipDialog
-        :height="300"
+        :height="350"
         :open="openEditDialog"
         confirm-class="accept"
         :confirm-text="$gettext('Speichern')"
@@ -77,11 +148,15 @@ const showJWTLink = computed(() => {
             <form class="default">
                 <label>
                     {{ $gettext('Maximale Anzahl Tokens') }}
-                    <input type="number" min="0" v-model="toolClone['max-tokens']" />
+                    <input type="number" min="0" :max="props.tool['max-quota']" v-model="toolClone['max-tokens']" :disabled="maxTokensUnlimited" />
+                    <span>{{ $gettext('unbegrenzt') }}</span>
+                    <input type="checkbox" @click="setUnlimited('max-tokens')" :checked="maxTokensUnlimited"/>
                 </label>
                 <label>
                     {{ $gettext('Tokens pro Nutzendem') }}
-                    <input type="number" min="0" v-model="toolClone['tokens-per-user']" />
+                    <input type="number" min="0" :max="toolClone['max-tokens']" v-model="toolClone['tokens-per-user']" :disabled="tokensPerUserUnlimited" />
+                    <span>{{ $gettext('unbegrenzt') }}</span>
+                    <input type="checkbox" @click="setUnlimited('tokens-per-user')" :checked="tokensPerUserUnlimited"/>
                 </label>
             </form>
         </template>
@@ -94,7 +169,8 @@ const showJWTLink = computed(() => {
     position: relative;
 
     &.active-item,
-    &.inactive-item {
+    &.inactive-item,
+    &.warning-item {
         padding: 0 10px 2px 10px;
         border-left-width: 6px;
         border-left-style: solid;
@@ -105,6 +181,9 @@ const showJWTLink = computed(() => {
     }
     &.inactive-item {
         border-left-color: var(--dark-gray-color-60);
+    }
+    &.warning-item {
+        border-left-color: var(--active-color);
     }
 
     .kit-tool-item-head {
@@ -129,8 +208,22 @@ const showJWTLink = computed(() => {
             background-color: transparent;
             cursor: pointer;
         }
-    }
+        .kit-token-info {
+            position: absolute;
+            right: 4px;
+            top: 0;
+            .kit-token-warning {
+                color: var(--active-color);
+            }
 
+            .seperator {
+                color: var(--black);
+            }
+        }
+    }
+    .kit-token-warning {
+        font-weight: 700;
+    }
     .kit-tool-item-body {
         display: flex;
         flex-direction: row;
@@ -138,6 +231,7 @@ const showJWTLink = computed(() => {
 
         img {
             width: 270px;
+            height: 180px;
         }
         p {
             max-width: 540px;

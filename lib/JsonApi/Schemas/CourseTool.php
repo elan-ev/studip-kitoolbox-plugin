@@ -11,6 +11,7 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
 
     const REL_TOOL = 'tool';
     const REL_COURSE = 'course';
+    const REL_QUOTAS = 'quotas';
 
     public function getId($resource): ?string
     {
@@ -20,15 +21,17 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
     public function getAttributes($resource, ContextInterface $context): iterable
     {
         return [
-            'name'              => (string) $resource['tool']['name'],
-            'description'       => (string) $resource['tool']['description'],
-            'preview'           => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['tool']['id'],
-            'tool-id'           => (int) $resource['tool_id'],
-            'course-id'         => (int) $resource['course_id'],
-            'active'            => (bool) $resource['active'],
-            'max-tokens'        => (string) $resource['max_tokens'],
-            'tokens-per-user'   => (int) $resource['tokens_per_user'],
-            'jwt'               => (string) (new JWTHandler($resource))->generateRefreshTokenUrl()
+            'name'                      => (string) $resource['tool']['name'],
+            'description'               => (string) $resource['tool']['description'],
+            'preview'                   => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['tool']['id'],
+            'tool-id'                   => (int) $resource['tool_id'],
+            'course-id'                 => (int) $resource['course_id'],
+            'active'                    => (bool) $resource['active'],
+            'max-tokens'                => (int) $resource['max_tokens'],
+            'max-tokens-unlimited'      => (bool) $resource->maxTokensUnlimited(),
+            'tokens-per-user'           => (int) $resource['tokens_per_user'],
+            'tokens-per-user-unlimited' => (int) $resource->tokensPerUserUnlimited(),
+            'jwt'                       => (string) (new JWTHandler($resource))->generateRefreshTokenUrl()
         ];
     }
 
@@ -58,6 +61,17 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
             self::RELATIONSHIP_DATA => $course,
         ]
         : [self::RELATIONSHIP_DATA => null];
+
+        $quotas = $resource->quotas;
+
+        $relationships[self::REL_QUOTAS] = $quotas
+        ? [
+            self::RELATIONSHIP_LINKS => [
+                Link::RELATED => $this->getRelationshipRelatedLink($resource, self::REL_QUOTAS),
+            ],
+            self::RELATIONSHIP_DATA => $quotas
+        ]
+        : [];
 
 
         return $relationships;

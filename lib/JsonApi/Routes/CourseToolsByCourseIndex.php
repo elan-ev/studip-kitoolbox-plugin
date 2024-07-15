@@ -13,6 +13,11 @@ class CourseToolsByCourseIndex extends JsonApiController
 {
     protected $allowedPagingParameters = ['offset', 'limit'];
 
+    protected $allowedIncludePaths = [
+        'quotas',
+        'tool'
+    ];
+
     public function __invoke(Request $request, Response $response, $args)
     {
         $user = $this->getUser($request);
@@ -27,7 +32,7 @@ class CourseToolsByCourseIndex extends JsonApiController
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit();
-        $resources = CourseTool::findBySQL('course_id = ? ORDER BY mkdate LIMIT ? OFFSET ?', [$course->id, $limit, $offset]);
+        $resources = CourseTool::findBySQL('course_id = ? ORDER BY tool_id LIMIT ? OFFSET ?', [$course->id, $limit, $offset]);
         $resources = array_filter($resources, function($course_tool) {
             if (!$course_tool->tool) {
                 return false;
