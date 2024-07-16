@@ -100,6 +100,10 @@ const itemAvailable = computed(() => {
     
     return userTokenLimit.value !== 0 && toolTokenLimit.value !== 0 && !toolTokenLimitReached.value;
 });
+
+const preview = computed(() => {
+    return props.tool.preview || STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg');
+});
 </script>
 
 <template>
@@ -129,7 +133,7 @@ const itemAvailable = computed(() => {
                 </div>
             </header>
             <div class="kit-tool-item-body">
-                <img :src="tool.preview" aria-hidden="true"/>
+                <img :src="preview" aria-hidden="true"/>
                 <p>{{ tool.description }}</p>
             </div>
         </article>

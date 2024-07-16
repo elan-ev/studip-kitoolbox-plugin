@@ -61,6 +61,7 @@ const initNewTool = () => {
         name: '',
         description: '',
         url: '',
+        'preview-url': '',
         key: '',
         'max-quota': 0
     };
@@ -86,19 +87,21 @@ const createTool = () => {
                 KI-Tools
             </caption>
             <colgroup>
-                <col width="5%" />
-                <col width="20%" />
-                <col width="10%" />
-                <col width="20%" />
-                <col width="20%" />
-                <col width="10%" />
-                <col width="10%" />
-                <col width="5%" />
+                <col width="5%" />  <!-- aktiv -->
+                <col width="10%" /> <!-- url -->
+                <col width="10%" /> <!-- preview-url -->
+                <col width="10%" /> <!-- jwt-schlüssel -->
+                <col width="20%" /> <!-- titel -->
+                <col width="30%" /> <!-- beschreibung -->
+                <col width="5%" /> <!-- unterstütze quota -->
+                <col width="5%" /> <!-- maximale quota -->
+                <col width="5%" />  <!-- aktionen -->
             </colgroup>
             <thead>
                 <tr>
                     <th>{{ $gettext('Aktiv') }}</th>
                     <th>{{ $gettext('URL') }}</th>
+                    <th>{{ $gettext('Preview-URL') }}</th>
                     <th>{{ $gettext('JWT Schlüssel') }}</th>
                     <th>{{ $gettext('Title') }}</th>
                     <th>{{ $gettext('Beschreibung') }}</th>
@@ -114,6 +117,9 @@ const createTool = () => {
                     </td>
                     <td>
                         {{ tool.url }}
+                    </td>
+                    <td>
+                        {{ tool.preview }}
                     </td>
                     <td>
                         {{ tool.key }}
@@ -153,14 +159,14 @@ const createTool = () => {
                     </td>
                 </tr>
                 <tr v-if="tools.length === 0">
-                    <td colspan="8">
+                    <td colspan="9">
                         {{ $gettext('Es wurden keine KI Tools eingetragen.') }}
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="8">
+                    <td colspan="9">
                         <div class="footer-items">
                             <button class="button add" @click="showCreateTool">
                                 {{ $gettext('Tool hinzufügen') }}
@@ -183,7 +189,7 @@ const createTool = () => {
         >
         </studip-dialog>
         <studip-dialog
-            :height="550"
+            :height="610"
             :open="openEditDialog"
             confirm-class="accept"
             :confirm-text="$gettext('Speichern')"
@@ -197,6 +203,10 @@ const createTool = () => {
                     <label>
                         {{ $gettext('URL') }}
                         <input type="url" v-model="currentTool.url" />
+                    </label>
+                    <label>
+                        {{ $gettext('Preview-URL') }}
+                        <input type="url" v-model="currentTool['preview-url']" />
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
@@ -218,7 +228,7 @@ const createTool = () => {
             </template>
         </studip-dialog>
         <studip-dialog
-            :height="550"
+            :height="610"
             :open="openCreateDialog"
             confirm-class="accept"
             :confirm-text="$gettext('Hinzufügen')"
@@ -232,6 +242,10 @@ const createTool = () => {
                     <label>
                         {{ $gettext('URL') }}
                         <input type="url" v-model="newTool.url" />
+                    </label>
+                    <label>
+                        {{ $gettext('Preview-URL') }}
+                        <input type="url" v-model="newTool['preview-url']" />
                     </label>
                     <label>
                         {{ $gettext('Titel') }}

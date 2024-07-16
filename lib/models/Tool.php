@@ -14,6 +14,7 @@ use SimpleORMap;
  * @property string $name database column
  * @property string $description database column
  * @property string $url database column
+ * @property string $preview_url database column
  * @property string $jwt_key database column
  * @property string $quota_type database column
  * @property int $max_quota database column

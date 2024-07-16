@@ -9,6 +9,7 @@ final class InitKitoolbox extends Migration
             `name`                  VARCHAR(255) NOT NULL,
             `description`           MEDIUMTEXT NOT NULL,
             `url`                   MEDIUMTEXT NOT NULL,
+            `preview_url`           MEDIUMTEXT NOT NULL,
             `jwt_key`               MEDIUMTEXT NOT NULL,
             `quota_type`            ENUM('token') NOT NULL,
             `max_quota`             INT(11) NOT NULL,

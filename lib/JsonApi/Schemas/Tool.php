@@ -21,10 +21,10 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'name'          => (string) $resource['name'],
             'description'   => (string) $resource['description'],
             'url'           => (string) $resource['url'],
+            'preview'       => (string) $resource['preview_url'],
             'active'        => (bool) $resource['active'],
             'max-quota'     => (int) $resource['max_quota'],
             'quota-type'    => (string) $resource['quota_type'],
-            'preview'       => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['id'],
             'used-tokens'   => (int) count($resource->quotas)
         ];
 

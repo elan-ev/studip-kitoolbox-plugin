@@ -23,7 +23,7 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
         return [
             'name'                      => (string) $resource['tool']['name'],
             'description'               => (string) $resource['tool']['description'],
-            'preview'                   => (string) 'https://picsum.photos/300/200?grayscale&random=' . $resource['tool']['id'],
+            'preview'                   => (string) $resource['tool']['preview_url'],
             'tool-id'                   => (int) $resource['tool_id'],
             'course-id'                 => (int) $resource['course_id'],
             'active'                    => (bool) $resource['active'],
