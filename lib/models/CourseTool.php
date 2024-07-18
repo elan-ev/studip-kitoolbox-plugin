@@ -66,6 +66,10 @@ class CourseTool extends SimpleORMap
 
     public function tokenLimitReached($user_id)
     {
+        if ($GLOBALS['perm']->have_studip_perm('tutor', $this->course->id, $user_id)) {
+            return false;
+        }
+
         $quotas = Quota::findBySQL('course_tool_id = ?', [$this->id]);
 
         $toolTokensLeft = $this->maxTokensUnlimited() || $this->max_tokens > count($quotas);
