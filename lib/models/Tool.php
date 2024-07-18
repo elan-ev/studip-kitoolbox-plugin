@@ -56,6 +56,6 @@ class Tool extends SimpleORMap
     {
         $quotas = Quota::findBySQL('tool_id = ?', [$this->id]);
 
-        return $this->max_tokens <= count($quotas);
+        return $this->max_quota <= count($quotas);
     }
 }
