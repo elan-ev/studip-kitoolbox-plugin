@@ -19,7 +19,7 @@ const toolClone = ref(null);
 const editModeHighlight = computed(() => {
     if (props.editMode) {
         if (toolTokenLimitReached.value) {
-            return 'warning-item'
+            return 'warning-item';
         }
         return props.tool['active-in-course'] ? 'active-item' : 'inactive-item';
     }
@@ -50,13 +50,13 @@ const setUnlimited = (field) => {
     if (field === 'tokens-per-user') {
         toolClone.value['tokens-per-user'] = tokensPerUserUnlimited.value ? 0 : -1;
     }
-}
+};
 
-const maxTokensUnlimited = computed( () => {
+const maxTokensUnlimited = computed(() => {
     return toolClone.value['max-tokens'] === -1;
 });
 
-const tokensPerUserUnlimited = computed( () => {
+const tokensPerUserUnlimited = computed(() => {
     return toolClone.value['tokens-per-user'] === -1;
 });
 
@@ -69,7 +69,7 @@ const quotas = computed(() => {
 });
 
 const userQuotas = computed(() => {
-    return quotas.value.filter((quota) =>  quota.user.data.id === contextStore.userId);
+    return quotas.value.filter((quota) => quota.user.data.id === contextStore.userId);
 });
 
 const toolTokenLimit = computed(() => {
@@ -87,7 +87,7 @@ const userTokenLimit = computed(() => {
     return props.tool['tokens-per-user'] - userQuotas.value.length;
 });
 
-const toolTokenLimitReached = computed(()=> {
+const toolTokenLimitReached = computed(() => {
     const tool = props.tool.tool?.data ?? props.tool;
 
     return tool['max-quota'] <= tool['used-tokens'];
@@ -97,47 +97,58 @@ const itemAvailable = computed(() => {
     if (contextStore.isTeacher) {
         return true;
     }
-    
+
     return userTokenLimit.value !== 0 && toolTokenLimit.value !== 0 && !toolTokenLimitReached.value;
 });
 
 const preview = computed(() => {
-    return props.tool.preview || STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg');
+    return (
+        props.tool.preview ||
+        STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg')
+    );
 });
 </script>
 
 <template>
-    <component :is="showJWTLink && itemAvailable ? 'a' : 'div'" :href="showJWTLink ? tool.jwt : null" :target="showJWTLink ? '_blank' : null ">
-        <article class="kit-tool-item" :class="editModeHighlight">
-            <header class="kit-tool-item-head">
-                <input
-                    v-if="editMode"
-                    type="checkbox"
-                    :checked="tool['active-in-course']"
-                    :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
-                    @change="toggleActiveState(tool)"
-                />
-                <h2>{{ tool.name }}</h2>
-                <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')"><StudipIcon shape="admin" /></button>
-                <div v-if="!editMode && !toolTokenLimitReached" class="kit-token-info">
-                    <span v-if="toolTokenLimit !== null" :class="{'kit-token-warning': toolTokenLimit <= 0}"> 
-                        {{ $gettext('Übrige Tokens') + ': ' + toolTokenLimit }}
-                    </span> 
-                    <span v-if="!contextStore.isTeacher &&userTokenLimit !== null" :class="{'kit-token-warning': userTokenLimit <= 0}">
-                        <span v-if="toolTokenLimit !== null" class="seperator"> | </span>
-                        {{ $gettext('Ihre restlichen Tokens') + ': ' + userTokenLimit }}
-                    </span>
-                </div>
-                <div v-if="toolTokenLimitReached" :class="{'kit-token-info' : !editMode}">
-                    <span class="kit-token-warning">{{ $gettext('Die Tokens für dieses Tool sind verbraucht!') }}</span>
-                </div>
-            </header>
-            <div class="kit-tool-item-body">
-                <img :src="preview" aria-hidden="true"/>
-                <p>{{ tool.description }}</p>
+    <article class="kit-tool-item" :class="editModeHighlight">
+        <header class="kit-tool-item-head">
+            <input
+                v-if="editMode"
+                type="checkbox"
+                :checked="tool['active-in-course']"
+                :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
+                @change="toggleActiveState(tool)"
+            />
+            <h2>{{ tool.name }}</h2>
+            <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')">
+                <StudipIcon shape="admin" />
+            </button>
+            <div v-if="!editMode && !toolTokenLimitReached" class="kit-token-info">
+                <span v-if="toolTokenLimit !== null" :class="{ 'kit-token-warning': toolTokenLimit <= 0 }">
+                    {{ $gettext('Übrige Tokens') + ': ' + toolTokenLimit }}
+                </span>
+                <span
+                    v-if="!contextStore.isTeacher && userTokenLimit !== null"
+                    :class="{ 'kit-token-warning': userTokenLimit <= 0 }"
+                >
+                    <span v-if="toolTokenLimit !== null" class="seperator"> | </span>
+                    {{ $gettext('Ihre restlichen Tokens') + ': ' + userTokenLimit }}
+                </span>
             </div>
-        </article>
-    </component>
+            <div v-if="toolTokenLimitReached" :class="{ 'kit-token-info': !editMode }">
+                <span class="kit-token-warning">{{ $gettext('Die Tokens für dieses Tool sind verbraucht!') }}</span>
+            </div>
+        </header>
+        <div class="kit-tool-item-body">
+            <img :src="preview" aria-hidden="true" />
+            <p>{{ tool.description }}</p>
+        </div>
+        <footer class="kit-tool-item-footer">
+            <a v-if="showJWTLink && itemAvailable" :href="tool.jwt" target="_blank" class="button">{{
+                $gettext('Tool starten')
+            }}</a>
+        </footer>
+    </article>
     <StudipDialog
         :height="350"
         :open="openEditDialog"
@@ -152,15 +163,27 @@ const preview = computed(() => {
             <form class="default">
                 <label>
                     {{ $gettext('Maximale Anzahl Tokens') }}
-                    <input type="number" min="0" :max="props.tool['max-quota']" v-model="toolClone['max-tokens']" :disabled="maxTokensUnlimited" />
+                    <input
+                        type="number"
+                        min="0"
+                        :max="props.tool['max-quota']"
+                        v-model="toolClone['max-tokens']"
+                        :disabled="maxTokensUnlimited"
+                    />
                     <span>{{ $gettext('unbegrenzt') }}</span>
-                    <input type="checkbox" @click="setUnlimited('max-tokens')" :checked="maxTokensUnlimited"/>
+                    <input type="checkbox" @click="setUnlimited('max-tokens')" :checked="maxTokensUnlimited" />
                 </label>
                 <label>
                     {{ $gettext('Tokens pro Nutzendem') }}
-                    <input type="number" min="0" :max="toolClone['max-tokens']" v-model="toolClone['tokens-per-user']" :disabled="tokensPerUserUnlimited" />
+                    <input
+                        type="number"
+                        min="0"
+                        :max="toolClone['max-tokens']"
+                        v-model="toolClone['tokens-per-user']"
+                        :disabled="tokensPerUserUnlimited"
+                    />
                     <span>{{ $gettext('unbegrenzt') }}</span>
-                    <input type="checkbox" @click="setUnlimited('tokens-per-user')" :checked="tokensPerUserUnlimited"/>
+                    <input type="checkbox" @click="setUnlimited('tokens-per-user')" :checked="tokensPerUserUnlimited" />
                 </label>
             </form>
         </template>
@@ -171,6 +194,7 @@ const preview = computed(() => {
 .kit-tool-item {
     max-width: 870px;
     position: relative;
+    margin-bottom: 4em;
 
     &.active-item,
     &.inactive-item,
@@ -230,6 +254,7 @@ const preview = computed(() => {
     }
     .kit-tool-item-body {
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         gap: 10px 40px;
 
@@ -240,6 +265,11 @@ const preview = computed(() => {
         p {
             max-width: 540px;
         }
+    }
+    .kit-tool-item-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
 }
 </style>
