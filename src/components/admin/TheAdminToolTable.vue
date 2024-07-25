@@ -62,7 +62,8 @@ const initNewTool = () => {
         description: '',
         url: '',
         'preview-url': '',
-        key: '',
+        jwt_key: '',
+        api_key: '',
         'max-quota': 0
     };
 };
@@ -122,7 +123,7 @@ const createTool = () => {
                         {{ tool.preview }}
                     </td>
                     <td>
-                        {{ tool.key }}
+                        {{ tool.jwt_key }}
                     </td>
                     <td>
                         {{ tool.name }}
@@ -205,8 +206,12 @@ const createTool = () => {
                         <input type="url" v-model="currentTool.url" />
                     </label>
                     <label>
+                        {{ $gettext('API Key') }}
+                        <input type="text" v-model="currentTool.api_key" />
+                    </label>
+                    <label>
                         {{ $gettext('Preview-URL') }}
-                        <input type="url" v-model="currentTool['preview-url']" />
+                        <input type="url" v-model="currentTool.preview" />
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
@@ -217,8 +222,8 @@ const createTool = () => {
                         <textarea v-model="currentTool.description"></textarea>
                     </label>
                     <label>
-                        {{ $gettext('Key') }}
-                        <input type="text" v-model="currentTool['key']" />
+                        {{ $gettext('JWT Key') }}
+                        <input type="text" v-model="currentTool.jwt_key" />
                     </label>
                     <label>
                         {{ $gettext('Max Quota') }}
@@ -244,8 +249,12 @@ const createTool = () => {
                         <input type="url" v-model="newTool.url" />
                     </label>
                     <label>
+                        {{ $gettext('API Key') }}
+                        <input type="text" v-model="newTool.api_key" />
+                    </label>
+                    <label>
                         {{ $gettext('Preview-URL') }}
-                        <input type="url" v-model="newTool['preview-url']" />
+                        <input type="url" v-model="newTool.preview" />
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
@@ -256,8 +265,8 @@ const createTool = () => {
                         <textarea v-model="newTool.description"></textarea>
                     </label>
                     <label>
-                        {{ $gettext('Key') }}
-                        <input type="text" v-model="newTool.key" />
+                        {{ $gettext('JWT Key') }}
+                        <input type="text" v-model="newTool.jwt_key" />
                     </label>
                     <label>
                         {{ $gettext('Max Quota') }}

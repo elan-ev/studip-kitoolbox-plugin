@@ -1,9 +1,9 @@
 <?php
+require_once __DIR__.'/bootstrap.php';
+
 use JsonApi\Contracts\JsonApiPlugin;
 use KIToolbox\JsonApi\Routes;
 use KIToolbox\JsonApi\Schemas;
-
-require_once __DIR__ . '/vendor/autoload.php';
 
 class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin, JsonApiPlugin
 {
@@ -36,6 +36,9 @@ class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin, Js
 
     public function perform($unconsumedPath)
     {
+        // This require must be here, to prevent vendor version conflicts.
+        require_once __DIR__ . '/vendor/autoload.php';
+
         $trails_root  = $this->getPluginPath() . '/app';
 
         $dispatcher         = new Trails_Dispatcher($trails_root,

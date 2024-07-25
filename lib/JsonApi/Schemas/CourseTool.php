@@ -3,7 +3,6 @@ namespace KIToolbox\JsonApi\Schemas;
 
 use Neomerx\JsonApi\Contracts\Schema\ContextInterface;
 use Neomerx\JsonApi\Schema\Link;
-use KIToolbox\JWT\JWTHandler;
 
 class CourseTool extends \JsonApi\Schemas\SchemaProvider
 {
@@ -20,7 +19,7 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
 
     public function getAttributes($resource, ContextInterface $context): iterable
     {
-        return [
+        $attributes =  [
             'name'                      => (string) $resource['tool']['name'],
             'description'               => (string) $resource['tool']['description'],
             'preview'                   => (string) $resource['tool']['preview_url'],
@@ -31,8 +30,18 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
             'max-tokens-unlimited'      => (bool) $resource->maxTokensUnlimited(),
             'tokens-per-user'           => (int) $resource['tokens_per_user'],
             'tokens-per-user-unlimited' => (int) $resource->tokensPerUserUnlimited(),
-            'jwt'                       => (string) (new JWTHandler($resource))->generateRefreshTokenUrl()
         ];
+
+        $attributes['redirect'] =  \PluginEngine::getURL(
+            'kitoolbox',
+            [
+                'cid' => $resource['course_id'],
+                'ktcid' => $resource['tool_id']
+            ],
+            'index/redirect'
+        );
+
+        return $attributes;
     }
 
     public function getRelationships($resource, ContextInterface $context): iterable

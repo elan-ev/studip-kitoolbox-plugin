@@ -11,6 +11,7 @@ final class InitKitoolbox extends Migration
             `url`                   MEDIUMTEXT NOT NULL,
             `preview_url`           MEDIUMTEXT NOT NULL,
             `jwt_key`               MEDIUMTEXT NOT NULL,
+            `api_key`               MEDIUMTEXT NOT NULL,
             `quota_type`            ENUM('token') NOT NULL,
             `max_quota`             INT(11) NOT NULL,
             `active`                TINYINT(1) NOT NULL DEFAULT '1',

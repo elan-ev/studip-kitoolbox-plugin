@@ -29,7 +29,8 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
         ];
 
         if ($isRoot) {
-            $attributes['key'] = (string) $resource['jwt_key'];
+            $attributes['jwt_key'] = (string) $resource['jwt_key'];
+            $attributes['api_key'] = (string) $resource['api_key'];
         }
 
         return $attributes;

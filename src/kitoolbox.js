@@ -22,7 +22,7 @@ app.use(pinia);
 
 const elem = document.getElementById('kitoolbox-app');
 const contextStore = useContextStore();
-if (elem.attributes['is-teacher'] !== undefined) {
+if (elem?.attributes?.['is-teacher'] !== undefined) {
   const isTeacher = JSON.parse(elem.attributes['is-teacher'].value);
   contextStore.setTeacherStatus(isTeacher);
 }

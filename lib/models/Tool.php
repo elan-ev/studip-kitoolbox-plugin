@@ -9,12 +9,13 @@ use SimpleORMap;
  *
  * @author  Ron Lucke <lucke@elan-ev.de>
  * @license GPL2 or any later version
- * 
+ *
  * @property int $id database column
  * @property string $name database column
  * @property string $description database column
  * @property string $url database column
  * @property string $preview_url database column
+ * @property string $api_key database column
  * @property string $jwt_key database column
  * @property string $quota_type database column
  * @property int $max_quota database column
