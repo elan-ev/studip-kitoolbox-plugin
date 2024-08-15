@@ -60,8 +60,8 @@ const tokensPerUserUnlimited = computed(() => {
     return toolClone.value['tokens-per-user'] === -1;
 });
 
-const showJWTLink = computed(() => {
-    return !props.editMode && Boolean(props.tool?.jwt);
+const showRedirectLink = computed(() => {
+    return !props.editMode && Boolean(props.tool?.redirect);
 });
 
 const quotas = computed(() => {
@@ -144,9 +144,9 @@ const preview = computed(() => {
             <p>{{ tool.description }}</p>
         </div>
         <footer class="kit-tool-item-footer">
-            <a v-if="showJWTLink && itemAvailable" :href="tool.jwt" target="_blank" class="button">{{
-                $gettext('Tool starten')
-            }}</a>
+            <a v-if="showRedirectLink && itemAvailable" :href="tool.redirect" target="_blank" class="button">
+                {{ $gettext('Tool starten') }}
+            </a>
         </footer>
     </article>
     <StudipDialog

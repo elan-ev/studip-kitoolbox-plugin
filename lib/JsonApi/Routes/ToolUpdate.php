@@ -64,8 +64,12 @@ class ToolUpdate extends JsonApiController
             $resource->preview_url = $json['data']['attributes']['preview-url'];
         }
 
-        if (isset($json['data']['attributes']['key'])) {
-            $resource->jwt_key = $json['data']['attributes']['key'];
+        if (isset($json['data']['attributes']['jwt_key'])) {
+            $resource->jwt_key = $json['data']['attributes']['jwt_key'];
+        }
+
+        if (isset($json['data']['attributes']['api_key'])) {
+            $resource->api_key = $json['data']['attributes']['api_key'];
         }
 
         if (isset($json['data']['attributes']['max-quota'])) {

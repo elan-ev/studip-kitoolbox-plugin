@@ -1,6 +1,7 @@
 <?php
 
 use KIToolbox\JWT\JWTHandler;
+use KIToolbox\ToolsApi\ToolApi;
 use KIToolbox\models\CourseTool;
 use KIToolbox\models\Quota;
 
@@ -54,33 +55,39 @@ class IndexController extends StudipController
         PageLayout::setBodyElementId('kitoolbar-index');
         PageLayout::setTitle('KI-Toolbox');
         $cid = Request::get('cid') ?? Context::getId();
-        $validated = false;
-        if ($token = Request::get('token')) {
-            $validated = JWTHandler::validateRefreshToken($token, $cid);
+        $ktcid = Request::get('ktcid');
+        if (empty($ktcid)) {
+            PageLayout::postError(_("Ungültige Parameter zum Ausführen der Anfrage"));
+            $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
         }
 
-        if ($validated) {
-            $ktcid = JWTHandler::getClaims($token, 'ktcid');
-            $courseTool = CourseTool::find($ktcid);
+        $courseTool = CourseTool::find($ktcid);
 
-            if ($courseTool && !empty($courseTool->tool->url)) {
-                $issuedToken = (new JWTHandler($courseTool))->issueToolToken();
-                $toolUrl = $courseTool->tool->url;
-                if (!filter_var($toolUrl, FILTER_VALIDATE_URL)) {
-                    PageLayout::postError(_("URL nicht zulässig! Bitte wenden Sie sich an Ihren Administrator."));
-                    $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
-                    return;
-                }
+        if ($courseTool &&
+            !empty($courseTool->tool->url) &&
+            !empty($courseTool->tool->api_key) &&
+            !empty($courseTool->tool->jwt_key))
+        {
+            $issuedToken = (new JWTHandler($courseTool))->issueToolToken();
+            $toolUrl = $courseTool->tool->url;
+            if (!filter_var($toolUrl, FILTER_VALIDATE_URL)) {
+                PageLayout::postError(_("URL nicht zulässig! Bitte wenden Sie sich an Ihren Administrator."));
+                $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
+                return;
+            }
 
-                if ($courseTool->tokenLimitReached($user->id) || $courseTool->tool->tokenLimitReached()) {
-                    PageLayout::postError(_("Die Tokens für dieses Tool wurden bereits verbraucht."));
-                    $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
-                    return;
-                }
+            $toolApiClient = new ToolApi($courseTool->tool->url, $courseTool->tool->api_key);
 
-                $this->createQuota($cid, $courseTool->id, $courseTool->tool->id);
-                // session_start();
-                // $_SESSION['token'] = $issuedToken;
+            if ($courseTool->tokenLimitReached($user->id) || $courseTool->tool->tokenLimitReached()) {
+                PageLayout::postError(_("Die Tokens für dieses Tool wurden bereits verbraucht."));
+                $this->redirect(\PluginEngine::getURL('kitoolbox', ['cid' => $cid], 'index'));
+                return;
+            }
+
+            $this->createQuota($cid, $courseTool->id, $courseTool->tool->id);
+
+            $res = $toolApiClient->AccessTool($issuedToken);
+            if ($res['code'] === 200) {
                 setcookie(
                     'token',
                     $issuedToken,
@@ -90,7 +97,6 @@ class IndexController extends StudipController
                     true,
                     true
                 );
-                // header('Set-Cookie: name=token; Secure; Path=/; SameSite=None; Partitioned;');
                 header('Location:' . $toolUrl);
                 die;
             }

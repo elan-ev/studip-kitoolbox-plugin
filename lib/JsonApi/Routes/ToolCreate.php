@@ -33,8 +33,11 @@ class ToolCreate extends JsonApiController
         if (!self::arrayHas($json, 'data')) {
             return 'Missing `data` member at document´s top level.';
         }
-        if (!self::arrayHas($json, 'data.attributes.key')) {
-            return 'New document must not have an `key`.';
+        if (!self::arrayHas($json, 'data.attributes.jwt_key')) {
+            return 'New document must not have an `jwt_key`.';
+        }
+        if (!self::arrayHas($json, 'data.attributes.api_key')) {
+            return 'New document must not have an `api_key`.';
         }
         if (!self::arrayHas($json, 'data.attributes.url')) {
             return 'New document must not have an `url`.';
@@ -52,7 +55,8 @@ class ToolCreate extends JsonApiController
 
     private function createTool(array $json): Tool
     {
-        $key = self::arrayGet($json, 'data.attributes.key', '');
+        $jwt_key = self::arrayGet($json, 'data.attributes.jwt_key', '');
+        $api_key = self::arrayGet($json, 'data.attributes.api_key', '');
         $url = self::arrayGet($json, 'data.attributes.url', '');
         $preview_url = self::arrayGet($json, 'data.attributes.preview-url', '');
         $name = self::arrayGet($json, 'data.attributes.name', '');
@@ -62,7 +66,8 @@ class ToolCreate extends JsonApiController
         $tool = Tool::create([
             'name' => $name,
             'description' => $description,
-            'jwt_key' => $key,
+            'api_key' => $api_key,
+            'jwt_key' => $jwt_key,
             'url' => $url,
             'preview_url' => $preview_url,
             'quota_type' => 'token',
