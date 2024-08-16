@@ -103,9 +103,17 @@ const itemAvailable = computed(() => {
 
 const preview = computed(() => {
     return (
-        props.tool.preview ||
+        props.tool.preview || props.tool.tool?.data?.metadata?.image_url	||
         STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg')
     );
+});
+
+const name = computed(() => {
+    return props.tool.name || props.tool.tool.data.metadata.title[contextStore.preferredLanguage];
+});
+
+const description = computed(() => {
+    return props.tool.description || props.tool.tool.data.metadata.description[contextStore.preferredLanguage];
 });
 </script>
 
@@ -119,7 +127,7 @@ const preview = computed(() => {
                 :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
                 @change="toggleActiveState(tool)"
             />
-            <h2>{{ tool.name }}</h2>
+            <h2>{{ name }}</h2>
             <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')">
                 <StudipIcon shape="admin" />
             </button>
@@ -141,7 +149,7 @@ const preview = computed(() => {
         </header>
         <div class="kit-tool-item-body">
             <img :src="preview" aria-hidden="true" />
-            <p>{{ tool.description }}</p>
+            <p>{{ description }}</p>
         </div>
         <footer class="kit-tool-item-footer">
             <a v-if="showRedirectLink && itemAvailable" :href="tool.redirect" target="_blank" class="button">

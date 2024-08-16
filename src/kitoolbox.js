@@ -26,5 +26,9 @@ if (elem?.attributes?.['is-teacher'] !== undefined) {
   const isTeacher = JSON.parse(elem.attributes['is-teacher'].value);
   contextStore.setTeacherStatus(isTeacher);
 }
+if (elem?.attributes?.['preferred-language'] !== undefined) {
+  const preferredLanguage = elem.attributes['preferred-language'].value;
+  contextStore.setPreferredLanguage(preferredLanguage);
+}
 
 app.mount('#kitoolbox-app');

@@ -234,7 +234,7 @@ class ToolApi extends Client
     public function getMetadata()
     {
         $uri = '/metadata';
-        return $this->performGet($uri);
+        return $this->performGet($uri)['body'];
     }
 
     public function getQuota()

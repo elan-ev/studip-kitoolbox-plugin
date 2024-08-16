@@ -4,6 +4,7 @@ import { api } from '../api.js';
 
 export const useContextStore = defineStore('kitoolbox-context', () => {
     const isTeacher = ref(false);
+    const preferredLanguage = ref('de_DE');
     const appLoaded = ref(false);
 
     const cid = computed(() => {
@@ -22,12 +23,18 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         isTeacher.value = val;
     }
 
+    function setPreferredLanguage(val) {
+        preferredLanguage.value = val;
+    }
+
     return {
         isTeacher,
+        preferredLanguage,
         cid,
         userId,
         appLoaded,
         setAppLoaded,
         setTeacherStatus,
+        setPreferredLanguage,
     };
 });

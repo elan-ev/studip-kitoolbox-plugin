@@ -2,6 +2,7 @@
 namespace KIToolbox\JsonApi\Schemas;
 
 use Neomerx\JsonApi\Contracts\Schema\ContextInterface;
+use KIToolbox\ToolsApi\ToolApi;
 
 class Tool extends \JsonApi\Schemas\SchemaProvider
 {
@@ -14,8 +15,10 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
 
     public function getAttributes($resource, ContextInterface $context): iterable
     {
+        require_once __DIR__ . '../../../../vendor/autoload.php';
         $userId = $this->currentUser->id;
         $isRoot = $GLOBALS['perm']->have_perm('root', $userId);
+        $apiTool = new ToolApi($resource['url'], $resource['api_key']);
 
         $attributes = [
             'name'          => (string) $resource['name'],
@@ -25,7 +28,8 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'active'        => (bool) $resource['active'],
             'max-quota'     => (int) $resource['max_quota'],
             'quota-type'    => (string) $resource['quota_type'],
-            'used-tokens'   => (int) count($resource->quotas)
+            'used-tokens'   => (int) count($resource->quotas),
+            'metadata'      => $apiTool->getMetadata()
         ];
 
         if ($isRoot) {

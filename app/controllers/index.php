@@ -23,6 +23,7 @@ class IndexController extends StudipController
             PageLayout::setBodyElementId('kitoolbar-index');
             PageLayout::setTitle('KI-Toolbox');
             $this->isTeacher = $perm->have_studip_perm('tutor', Context::getId(), $user->id);
+            $this->preferredLanguage = str_replace('_', '-', $_SESSION['_language']);
             $this->buildSidebar();
             $this->getHelpbarContent();
         }
@@ -87,6 +88,7 @@ class IndexController extends StudipController
             $this->createQuota($cid, $courseTool->id, $courseTool->tool->id);
 
             $res = $toolApiClient->AccessTool($issuedToken);
+
             if ($res['code'] === 200) {
                 setcookie(
                     'token',
