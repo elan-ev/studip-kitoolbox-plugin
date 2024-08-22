@@ -32,6 +32,7 @@ class KIToolbox extends StudIPPlugin implements StandardPlugin, SystemPlugin, Js
         ]);
 
         PageLayout::addStylesheet($this->getPluginUrl() . '/dist/kitoolbox.css');
+        PageLayout::addStylesheet($this->getPluginUrl() . '/dist/kitoolbox-admin.css');
     }
 
     public function perform($unconsumedPath)

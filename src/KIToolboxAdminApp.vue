@@ -1,16 +1,21 @@
 <script setup>
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import TheAdminToolTable from './components/admin/TheAdminToolTable.vue';
+import StudipProgressIndicator from './components/studip/StudipProgressIndicator.vue';
 import { useToolsStore } from './stores/tools';
 
 const toolsStore = useToolsStore();
 
-onBeforeMount(() => {
-  toolsStore.fetchTools();
+const loadingTools = ref(true);
+
+onBeforeMount(async () => {
+  await toolsStore.fetchTools();
+  loadingTools.value = false;
 })
 
 </script>
 
 <template>
-    <the-admin-tool-table />
+    <StudipProgressIndicator v-if="loadingTools" :description="$gettext('Lade Tools...')"/>
+    <the-admin-tool-table v-else />
 </template>

@@ -10,7 +10,6 @@ class IndexController extends StudipController
 
     public function before_filter(&$action, &$args)
     {
-        SimpleORMap::expireTableScheme();
         parent::before_filter($action, $args);
     }
 

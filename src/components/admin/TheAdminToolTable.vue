@@ -117,19 +117,19 @@ const createTool = () => {
                         <input type="checkbox" :checked="tool.active" @change="toggleActiveState(tool)" />
                     </td>
                     <td>
-                        {{ tool.url }}
+                        {{ tool.url || 'default' }}
                     </td>
                     <td>
-                        {{ tool.preview }}
+                        {{ tool.preview || 'default' }}
                     </td>
                     <td>
                         {{ tool.jwt_key }}
                     </td>
                     <td>
-                        {{ tool.name }}
+                        {{ tool.name || 'default' }}
                     </td>
                     <td>
-                        {{ tool.description }}
+                        {{ tool.description || 'default' }}
                     </td>
                     <td>
                         {{ tool['quota-type'] }}
@@ -212,14 +212,17 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Preview-URL') }}
                         <input type="url" v-model="currentTool.preview" />
+                        <span class="tool-metadata">{{ currentTool.metadata.image_url }}</span>
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
                         <input type="text" v-model="currentTool.name" />
+                        <span class="tool-metadata">{{ currentTool.metadata.title['de-DE'] }}</span>
                     </label>
                     <label>
                         {{ $gettext('Beschreibung') }}
                         <textarea v-model="currentTool.description"></textarea>
+                        <span class="tool-metadata">{{ currentTool.metadata.description['de-DE'] }}</span>
                     </label>
                     <label>
                         {{ $gettext('JWT Key') }}
@@ -253,27 +256,16 @@ const createTool = () => {
                         <input type="text" v-model="newTool.api_key" />
                     </label>
                     <label>
-                        {{ $gettext('Preview-URL') }}
-                        <input type="url" v-model="newTool.preview" />
-                    </label>
-                    <label>
-                        {{ $gettext('Titel') }}
-                        <input type="text" v-model="newTool.name" />
-                    </label>
-                    <label>
-                        {{ $gettext('Beschreibung') }}
-                        <textarea v-model="newTool.description"></textarea>
-                    </label>
-                    <label>
                         {{ $gettext('JWT Key') }}
                         <input type="text" v-model="newTool.jwt_key" />
-                    </label>
-                    <label>
-                        {{ $gettext('Max Quota') }}
-                        <input type="text" v-model="newTool['max-quota']" />
                     </label>
                 </form>
             </template>
         </studip-dialog>
     </div>
 </template>
+<style lang="scss">
+.tool-metadata {
+    font-style: oblique;
+}
+</style>
