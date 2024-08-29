@@ -67,6 +67,7 @@ export const useRulesStore = defineStore('kitoolbox-rules', () => {
         const newRule = {
             'content': rule.content,
             'course-id': contextStore.cid,
+            'released': rule.released
         };
         const { data } = await api.create('kitoolbox-rules', newRule);
         storeRecord(data);
