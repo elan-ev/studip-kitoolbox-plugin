@@ -18,6 +18,14 @@ trait Routes
         $group->get('/kitoolbox-course-tools/{id}', Routes\CourseToolShow::class);
         $group->patch('/kitoolbox-course-tools/{id}', Routes\CourseToolUpdate::class);
         $group->delete('/kitoolbox-course-tools/{id}', Routes\CourseToolDelete::class);
+
+
+        $group->get('/kitoolbox-rules', Routes\RulesIndex::class);
+        $group->post('/kitoolbox-rules', Routes\RuleCreate::class);
+        $group->get('/kitoolbox-rules/{id}', Routes\RuleShow::class);
+        $group->get('/courses/{id}/kitoolbox-rules', Routes\RuleByCourse::class);
+        $group->patch('/kitoolbox-rules/{id}', Routes\RuleUpdate::class);
+        $group->delete('/kitoolbox-rules/{id}', Routes\RuleDelete::class);
     }
     public function registerUnauthenticatedRoutes(\Slim\Routing\RouteCollectorProxy $group)
     {

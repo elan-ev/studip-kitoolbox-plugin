@@ -59,4 +59,29 @@ class Authority
     {
         return $GLOBALS['perm']->have_studip_perm('autor', $course->id, $user->id);
     }
+
+    public static function canIndexRule($user): bool
+    {
+        return $GLOBALS['perm']->have_perm('root', $user->id);
+    }
+
+    public static function canShowRule($user, $resource): bool
+    {
+        return $GLOBALS['perm']->have_studip_perm('autor', $resource->course_id, $user->id);
+    }
+
+    public static function canCreateRule($user, $course): bool
+    {
+        return $GLOBALS['perm']->have_studip_perm('tutor', $course->id, $user->id);
+    }
+
+    public static function canUpdateRule($user, $resource): bool
+    {
+        return $GLOBALS['perm']->have_studip_perm('tutor', $resource->course_id, $user->id);
+    }
+
+    public static function canDeleteRule($user, $resource): bool
+    {
+        return $GLOBALS['perm']->have_studip_perm('tutor', $resource->course_id, $user->id);
+    }
 }

@@ -18,7 +18,7 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
         require_once __DIR__ . '../../../../vendor/autoload.php';
         $userId = $this->currentUser->id;
         $isRoot = $GLOBALS['perm']->have_perm('root', $userId);
-        $apiTool = new ToolApi($resource['url'], $resource['api_key']);
+        // $apiTool = new ToolApi($resource['url'], $resource['api_key']);
 
         $attributes = [
             'name'          => (string) $resource['name'],
@@ -29,7 +29,8 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
             'max-quota'     => (int) $resource['max_quota'],
             'quota-type'    => (string) $resource['quota_type'],
             'used-tokens'   => (int) count($resource->quotas),
-            'metadata'      => $apiTool->getMetadata()
+            // 'metadata'      => $apiTool->getMetadata()
+            'metadata' => null
         ];
 
         if ($isRoot) {

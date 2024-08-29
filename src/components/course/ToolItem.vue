@@ -103,17 +103,17 @@ const itemAvailable = computed(() => {
 
 const preview = computed(() => {
     return (
-        props.tool.preview || props.tool.tool?.data?.metadata?.image_url	||
+        props.tool.preview || props.tool.tool?.data?.metadata?.image_url	|| props.tool.metadata?.image_url	||
         STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg')
     );
 });
 
 const name = computed(() => {
-    return props.tool.name || props.tool.tool.data.metadata.title[contextStore.preferredLanguage];
+    return props.tool.name || props.tool.tool?.data?.metadata?.title[contextStore.preferredLanguage] || props.tool.metadata?.title[contextStore.preferredLanguage] || '---';
 });
 
 const description = computed(() => {
-    return props.tool.description || props.tool.tool.data.metadata.description[contextStore.preferredLanguage];
+    return props.tool.description || props.tool.tool?.data.metadata?.description[contextStore.preferredLanguage] || props.tool.metadata?.description[contextStore.preferredLanguage] || '---';
 });
 </script>
 

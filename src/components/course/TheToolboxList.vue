@@ -57,7 +57,7 @@ const showTeaser = computed(() => {
             <ToolItem :tool="tool" :editMode="editMode" />
         </li>
     </ul>
-    <EmptyTeaser v-show="showTeaser" @switch-mode-edit="$emit('switch-mode-edit')"/>
+    <EmptyTeaser v-show="showTeaser" @switch-mode-edit="$emit('switch-mode-edit')" @show-rules-dialog="$emit('show-rules-dialog')"/>
 </template>
 
 <style lang="scss">
