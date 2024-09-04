@@ -212,17 +212,17 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Preview-URL') }}
                         <input type="url" v-model="currentTool.preview" />
-                        <span class="tool-metadata">{{ currentTool.metadata.image_url }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.image_url }}</span>
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
                         <input type="text" v-model="currentTool.name" />
-                        <span class="tool-metadata">{{ currentTool.metadata.title['de-DE'] }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.title['de-DE'] }}</span>
                     </label>
                     <label>
                         {{ $gettext('Beschreibung') }}
                         <textarea v-model="currentTool.description"></textarea>
-                        <span class="tool-metadata">{{ currentTool.metadata.description['de-DE'] }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.description['de-DE'] }}</span>
                     </label>
                     <label>
                         {{ $gettext('JWT Key') }}

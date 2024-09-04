@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue';
-import TheToolboxList from './components/course/TheToolboxList.vue';
 import StudipProgressIndicator from './components/studip/StudipProgressIndicator.vue';
 import StudipDialog from './components/studip/StudipDialog.vue';
 import StudipIcon from './components/studip/StudipIcon.vue';
@@ -8,31 +7,20 @@ import { useToolsStore } from './stores/tools';
 import { useCourseToolsStore } from './stores/course-tools';
 import { useContextStore } from './stores/context';
 import { useRulesStore } from './stores/rules';
+import TheToolList from './components/course/TheToolList.vue';
+import TheCourseToolList from './components/course/TheCourseToolList.vue';
+import TheRuleBox from './components/course/TheRuleBox.vue';
 
 const contextStore = useContextStore();
 const toolsStore = useToolsStore();
 const courseToolsStore = useCourseToolsStore();
 const rulesStore = useRulesStore();
 
-const studentView = ref(true);
-const editView = ref(false);
-
 const courseToolInterval = ref(null);
 
 const openRulesDialog = ref(false);
 const ruleContent = ref(null);
 const ruleReleased = ref(false);
-
-const switchView = (view) => {
-    if (view === 'student') {
-        studentView.value = true;
-        editView.value = false;
-    }
-    if (view === 'edit') {
-        studentView.value = false;
-        editView.value = true;
-    }
-};
 
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
@@ -74,9 +62,10 @@ const storeRules = () => {
 
 onBeforeMount(async () => {
     await courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
+    await rulesStore.fetchRuleByCourse(contextStore.cid);
+
     if (isTeacher) {
         await toolsStore.fetchTools();
-        await rulesStore.fetchRuleByCourse(contextStore.cid);
         if (!hasRule.value) {
             updateShowRulesDialog(true);
         } else {
@@ -109,61 +98,51 @@ onBeforeUnmount(() => {
 </script>
 <template>
     <template v-if="appLoaded">
-        <TheToolboxList
-            :editMode="editView"
-            @switch-mode-edit="switchView('edit')"
-            @show-rules-dialog="updateShowRulesDialog(true)"
-        />
-        <StudipDialog
-            v-if="isTeacher"
-            :height="640"
-            :width="900"
-            :open="openRulesDialog"
-            confirm-class="accept"
-            :confirm-text="$gettext('Speichern')"
-            :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erst einmal umschauen')"
-            :title="$gettext('Rules for Tools')"
-            @update:open="updateShowRulesDialog"
-            @confirm="storeRules"
-        >
-            <template #dialogContent>
-                <div class="kit-rule-edit-wrapper">
-                    <div class="kit-rule-edit-info">
-                        <StudipIcon shape="network2" :size="96" class="kit-rule-edit-info-icon" />
-                        <div class="kit-rule-edit-info-text">
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+        <TheRuleBox v-if="hasRule" @edit-rule="updateShowRulesDialog(true)"/>
+        <template v-if="isTeacher">
+            <TheToolList />
+            <StudipDialog
+                v-if="isTeacher"
+                :height="640"
+                :width="900"
+                :open="openRulesDialog"
+                confirm-class="accept"
+                :confirm-text="$gettext('Speichern')"
+                :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erst einmal umschauen')"
+                :title="$gettext('Rules for Tools')"
+                @update:open="updateShowRulesDialog"
+                @confirm="storeRules"
+            >
+                <template #dialogContent>
+                    <div class="kit-rule-edit-wrapper">
+                        <div class="kit-rule-edit-info">
+                            <StudipIcon shape="network2" :size="96" class="kit-rule-edit-info-icon" />
+                            <div class="kit-rule-edit-info-text">
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                            </div>
+                        </div>
+                        <div class="kit-rule-edit-form">
+                            <form class="default">
+                                <label>
+                                    {{ $gettext('Rules for Tools') }}
+                                    <textarea v-model="ruleContent"></textarea>
+                                </label>
+                                <label class="col-2">
+                                    {{ $gettext('Veröffentlicht') }}
+                                    <select v-model="ruleReleased">
+                                        <option :value="false">{{ $gettext('Nein') }}</option>
+                                        <option :value="true">{{ $gettext('Ja') }}</option>
+                                    </select>
+                                </label>
+                            </form>
                         </div>
                     </div>
-                    <div class="kit-rule-edit-form">
-                        <form class="default">
-                            <label>
-                                {{ $gettext('Rules for Tools') }}
-                                <textarea v-model="ruleContent"></textarea>
-                            </label>
-                            <label class="col-2">
-                                {{ $gettext('Veröffentlicht') }}
-                                <select v-model="ruleReleased">
-                                    <option :value="false">{{ $gettext('Nein') }}</option>
-                                    <option :value="true">{{ $gettext('Ja') }}</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                </div>
-            </template>
-        </StudipDialog>
-        <Teleport to="#ki-toolbox-view-widget .sidebar-views">
-            <li :class="{ active: studentView }">
-                <button type="button" @click="switchView('student')">
-                    {{ $gettext('Studierendenansicht') }}
-                </button>
-            </li>
-            <li :class="{ active: editView }">
-                <button type="button" @click="switchView('edit')">
-                    {{ $gettext('Bearbeitungsansicht') }}
-                </button>
-            </li>
-        </Teleport>
+                </template>
+            </StudipDialog>
+        </template>
+        <template v-else>
+            <TheCourseToolList />
+        </template>
     </template>
     <template v-else>
         <StudipProgressIndicator :description="$gettext('Lade Tools...')" />
@@ -172,6 +151,10 @@ onBeforeUnmount(() => {
 
 
 <style lang="scss">
+#kitoolbox-app {
+    max-width: 880px;
+    // margin: 0 auto;
+}
 .kit-rule-edit-wrapper {
     display: flex;
     flex-direction: row;

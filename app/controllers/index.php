@@ -21,25 +21,12 @@ class IndexController extends StudipController
             Navigation::activateItem('course/kitoolbox/index');
             PageLayout::setBodyElementId('kitoolbar-index');
             PageLayout::setTitle('KI-Toolbox');
+            // PageLayout::disableSidebar();
             $this->isTeacher = $perm->have_studip_perm('tutor', Context::getId(), $user->id);
             $this->preferredLanguage = str_replace('_', '-', $_SESSION['_language']);
-            $this->buildSidebar();
             $this->getHelpbarContent();
         }
 
-    }
-
-    private function buildSidebar()
-    {
-        global $perm, $user;
-
-        if ( $perm->have_studip_perm('tutor', Context::getId(), $user->id)) {
-            $sidebar = Sidebar::get();
-            $views = new ViewsWidget();
-            $views->setId('ki-toolbox-view-widget');
-            $views->addLink('','',null, ['view-dummy-item' => true]);
-            $sidebar->addWidget($views);
-        }
     }
 
     protected function getHelpbarContent()
