@@ -24,9 +24,9 @@ const showRule = computed(() => {
 <template>
     <form v-if="showRule" class="default collapsable kit-rule-box" @submit.prevent>
         <fieldset class="collapsed">
-            <legend>{{ $gettext('Rules for Tools') }} <span v-if="isTeacher && !rule.released">({{ $gettext('nicht veröffentlicht') }})</span></legend>
+            <legend>{{ $gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools') }} <span v-if="isTeacher && !rule.released">({{ $gettext('nicht veröffentlicht') }})</span></legend>
             <article class="kit-rule-content">
-                <p>{{ rule.content }}</p>
+                <p v-html="rule.content"></p>
                 <button v-if="isTeacher" class="button" @click="$emit('edit-rule')">{{ $gettext('Bearbeiten') }}</button>
             </article>
         </fieldset>

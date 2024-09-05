@@ -10,6 +10,8 @@ import { useRulesStore } from './stores/rules';
 import TheToolList from './components/course/TheToolList.vue';
 import TheCourseToolList from './components/course/TheCourseToolList.vue';
 import TheRuleBox from './components/course/TheRuleBox.vue';
+import TheTeaserBox from './components/course/TheTeaserBox.vue';
+import StudipWysiwyg from './components/studip/StudipWysiwyg.vue';
 
 const contextStore = useContextStore();
 const toolsStore = useToolsStore();
@@ -98,6 +100,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
     <template v-if="appLoaded">
+        <TheTeaserBox />
         <TheRuleBox v-if="hasRule" @edit-rule="updateShowRulesDialog(true)"/>
         <template v-if="isTeacher">
             <TheToolList />
@@ -109,23 +112,31 @@ onBeforeUnmount(() => {
                 confirm-class="accept"
                 :confirm-text="$gettext('Speichern')"
                 :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erst einmal umschauen')"
-                :title="$gettext('Rules for Tools')"
+                :title="$gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools')"
                 @update:open="updateShowRulesDialog"
                 @confirm="storeRules"
             >
                 <template #dialogContent>
                     <div class="kit-rule-edit-wrapper">
                         <div class="kit-rule-edit-info">
-                            <StudipIcon shape="network2" :size="96" class="kit-rule-edit-info-icon" />
+                            <StudipIcon shape="literature2" :size="96" class="kit-rule-edit-info-icon" />
                             <div class="kit-rule-edit-info-text">
-                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                                <p>
+                                    Stellen Sie Regeln für die Nutzung von KI-Tools in Ihrer Lehrveranstaltung auf
+                                    (warum das wichtig ist, erfahren Sie hier). Bei der Formulierung helfen Ihnen die
+                                    folgenden Fragen:
+                                </p>
+                                <ul>
+                                    <li>Möchten Sie KI-Tools in Ihrer Veranstaltung zulassen? Wenn ja, welche und unter welchen Umständen? Wenn nein, warum nicht?</li>
+                                    <li>Wozu möchten Sie Studierende verpflichten, wenn sie KI-Tools nutzen?</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="kit-rule-edit-form">
                             <form class="default">
                                 <label>
                                     {{ $gettext('Rules for Tools') }}
-                                    <textarea v-model="ruleContent"></textarea>
+                                    <StudipWysiwyg v-model="ruleContent"></StudipWysiwyg>
                                 </label>
                                 <label class="col-2">
                                     {{ $gettext('Veröffentlicht') }}
@@ -176,6 +187,10 @@ onBeforeUnmount(() => {
             overflow-y: auto;
             margin: 1em 0 1em 1em;
             padding-right: 1em;
+
+            ul {
+                padding-left: 15px;
+            }
         }
     }
     .kit-rule-edit-form {
