@@ -10,6 +10,10 @@ const contextStore = useContextStore();
 
 const props = defineProps({
     tool: Object,
+    settingsEnabled: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const openEditDialog = ref(false);
@@ -86,7 +90,7 @@ const description = computed(() => {
                 @change="toggleActiveState(tool)"
             />
             <h2>{{ name }}</h2>
-            <button @click="showEditTool" :title="$gettext('Einstellungen')">
+            <button v-if="settingsEnabled" @click="showEditTool" :title="$gettext('Einstellungen')">
                 <StudipIcon shape="admin" />
             </button>
         </header>

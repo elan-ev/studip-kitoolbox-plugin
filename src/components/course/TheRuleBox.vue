@@ -37,7 +37,7 @@ const showRule = computed(() => {
     margin-bottom: 30px;
 
     .kit-rule-content {
-    padding: 10px;
+    padding: 10px 20px;
 }
 }
 
