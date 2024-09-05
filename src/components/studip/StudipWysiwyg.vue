@@ -5,6 +5,7 @@ const ClassicEditor = inject('ClassicEditor');
 
 const toolbar = {
     items: [
+        'heading',
         'bold',
         'italic',
         'underline',
@@ -16,7 +17,14 @@ const toolbar = {
         '|',
         'bulletedList',
         'numberedList',
+        '|',
+        'link',
+        'insertTable',
+        'specialCharacters',
+        'horizontalLine'
+
     ],
+    shouldNotGroupWhenFull: false,
 };
 
 const props = defineProps(['modelValue']);

@@ -107,11 +107,11 @@ onBeforeUnmount(() => {
             <StudipDialog
                 v-if="isTeacher"
                 :height="640"
-                :width="900"
+                :width="880"
                 :open="openRulesDialog"
                 confirm-class="accept"
                 :confirm-text="$gettext('Speichern')"
-                :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erst einmal umschauen')"
+                :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erstmal umschauen')"
                 :title="$gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools')"
                 @update:open="updateShowRulesDialog"
                 @confirm="storeRules"
@@ -134,17 +134,18 @@ onBeforeUnmount(() => {
                         </div>
                         <div class="kit-rule-edit-form">
                             <form class="default">
-                                <label>
+                                <label for="rule-content">
                                     {{ $gettext('Rules for Tools') }}
-                                    <StudipWysiwyg v-model="ruleContent"></StudipWysiwyg>
                                 </label>
-                                <label class="col-2">
+                                <StudipWysiwyg id="rule-content" v-model="ruleContent"></StudipWysiwyg>
+                                <br>
+                                <label for="rule-released">
                                     {{ $gettext('Veröffentlicht') }}
-                                    <select v-model="ruleReleased">
+                                </label>
+                                <select id="rule-released" v-model="ruleReleased">
                                         <option :value="false">{{ $gettext('Nein') }}</option>
                                         <option :value="true">{{ $gettext('Ja') }}</option>
                                     </select>
-                                </label>
                             </form>
                         </div>
                     </div>
@@ -169,8 +170,10 @@ onBeforeUnmount(() => {
 .kit-rule-edit-wrapper {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 20px;
     height: 100%;
+    justify-content: space-between;
 
     .kit-rule-edit-info {
         width: 270px;
@@ -196,11 +199,6 @@ onBeforeUnmount(() => {
     .kit-rule-edit-form {
         flex-grow: 1;
         max-width: 540px;
-
-        textarea {
-            height: 12em;
-            resize: none;
-        }
     }
 }
 </style>
