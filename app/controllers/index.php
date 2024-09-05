@@ -21,7 +21,7 @@ class IndexController extends StudipController
             Navigation::activateItem('course/kitoolbox/index');
             PageLayout::setBodyElementId('kitoolbar-index');
             PageLayout::setTitle('KI-Toolbox');
-            // PageLayout::disableSidebar();
+            PageLayout::disableSidebar();
             $this->isTeacher = $perm->have_studip_perm('tutor', Context::getId(), $user->id);
             $this->preferredLanguage = str_replace('_', '-', $_SESSION['_language']);
             $this->getHelpbarContent();

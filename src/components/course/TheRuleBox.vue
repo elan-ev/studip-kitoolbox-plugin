@@ -28,6 +28,7 @@ const showRule = computed(() => {
             <article class="kit-rule-content">
                 <p v-html="rule.content"></p>
                 <button v-if="isTeacher" class="button" @click="$emit('edit-rule')">{{ $gettext('Bearbeiten') }}</button>
+                <button class="button" @click="$emit('release')">{{ $gettext('Veröffentlichen') }}</button>
             </article>
         </fieldset>
     </form>
