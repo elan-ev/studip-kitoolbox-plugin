@@ -52,7 +52,6 @@ class CourseTool extends SimpleORMap
     protected function cbBeforeDelete()
     {
         Quota::deleteBySQL('course_tool_id = ?', [$this->id]);
-        Rule::deleteBySQL('course_tool_id = ?', [$this->id]);
     }
 
     public function maxTokensUnlimited()
