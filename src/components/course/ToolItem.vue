@@ -96,7 +96,7 @@ const description = computed(() => {
         </header>
         <div class="kit-tool-item-body">
             <img :src="preview" aria-hidden="true" />
-            <p>{{ description }}</p>
+            <p v-html="description" class="formatted-content ck-content"></p>
         </div>
         <footer class="kit-tool-item-footer">
             <a :href="tool['course-tool'].redirect" target="_blank" class="button">
@@ -147,9 +147,8 @@ const description = computed(() => {
 
 <style lang="scss">
 .kit-tool-item {
-    max-width: 870px;
     position: relative;
-    margin-bottom: 4em;
+    margin-bottom: 15px;
 
     &.active-item,
     &.inactive-item,

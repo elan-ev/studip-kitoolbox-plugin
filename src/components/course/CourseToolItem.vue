@@ -10,7 +10,7 @@ const props = defineProps({
 });
 
 const preview = computed(() => {
-    return  STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg');
+    return  props.courseTool.preview || STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg');
 });
 
 const name = computed(() => {
@@ -46,7 +46,7 @@ const description = computed(() => {
         </header>
         <div class="kit-tool-item-body">
             <img :src="preview" aria-hidden="true" />
-            <p>{{ description }}</p>
+            <p v-html="description" class="formatted-content ck-content"></p>
         </div>
         <footer class="kit-tool-item-footer">
             <a :href="courseTool.redirect" target="_blank" class="button">

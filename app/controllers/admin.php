@@ -17,5 +17,6 @@ class AdminController extends StudipController
     public function index_action()
     {
         PageLayout::setTitle('KI-Toolbox Konfiguration');
+        PageLayout::setBodyElementId('kitoolbox-admin');
     }
 }

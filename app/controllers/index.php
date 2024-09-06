@@ -19,7 +19,7 @@ class IndexController extends StudipController
 
         if (Navigation::hasItem('course/kitoolbox')) {
             Navigation::activateItem('course/kitoolbox/index');
-            PageLayout::setBodyElementId('kitoolbar-index');
+            PageLayout::setBodyElementId('kitoolbox-index');
             PageLayout::setTitle('KI-Toolbox');
             PageLayout::disableSidebar();
             $this->isTeacher = $perm->have_studip_perm('tutor', Context::getId(), $user->id);
@@ -39,7 +39,7 @@ class IndexController extends StudipController
     {
         global $user;
 
-        PageLayout::setBodyElementId('kitoolbar-index');
+        PageLayout::setBodyElementId('kitoolbox-index');
         PageLayout::setTitle('KI-Toolbox');
         $cid = Request::get('cid') ?? Context::getId();
         $ktcid = Request::get('ktcid');

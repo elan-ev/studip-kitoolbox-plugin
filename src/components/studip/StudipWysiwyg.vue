@@ -21,7 +21,7 @@ const toolbar = {
         'link',
         'insertTable',
         'specialCharacters',
-        'horizontalLine'
+        'horizontalLine', 
 
     ],
     shouldNotGroupWhenFull: false,
