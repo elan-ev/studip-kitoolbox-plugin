@@ -38,7 +38,7 @@ const updateShowEditDialog = (state) => {
     openEditDialog.value = state;
 };
 const showEditTool = () => {
-    toolClone.value = JSON.parse(JSON.stringify(props.tool['course-tool']));
+    toolClone.value = JSON.parse(JSON.stringify(props.tool?.['course-tool']));
     updateShowEditDialog(true);
 };
 
@@ -99,7 +99,7 @@ const description = computed(() => {
             <p v-html="description" class="formatted-content ck-content"></p>
         </div>
         <footer class="kit-tool-item-footer">
-            <a :href="tool['course-tool'].redirect" target="_blank" class="button">
+            <a :href="tool.redirect" target="_blank" class="button">
                 {{ $gettext('Tool starten') }}
             </a>
         </footer>

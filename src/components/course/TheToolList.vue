@@ -18,6 +18,7 @@ const tools = computed(() => {
         });
         tool['active-in-course'] = Boolean(courseTool && courseTool?.active);
         tool['course-tool'] = courseTool;
+        tool.redirect = courseTool ? courseTool.redirect : tool.url;
         return tool;
     });
 });
