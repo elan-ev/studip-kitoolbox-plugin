@@ -61,7 +61,7 @@ class ToolCreate extends JsonApiController
         $preview_url = self::arrayGet($json, 'data.attributes.preview-url', '');
         $name = self::arrayGet($json, 'data.attributes.name', '');
         $description= self::arrayGet($json, 'data.attributes.description', '');
-        $max_quota = self::arrayGet($json, 'data.attributes.max-quota', '');
+        $max_quota = self::arrayGet($json, 'data.attributes.max-quota', '-1');
 
         $tool = Tool::create([
             'name' => $name,

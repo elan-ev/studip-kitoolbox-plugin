@@ -28,6 +28,10 @@ const indicatorClass = computed(() => {
 const toolTokenLimitReached = computed(() => {
     const tool = props.tool.tool?.data ?? props.tool;
 
+    if (tool['max-quota'] === -1) {
+        return false;
+    }
+
     return tool['max-quota'] <= tool['used-tokens'];
 });
 

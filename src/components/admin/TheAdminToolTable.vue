@@ -67,7 +67,7 @@ const initNewTool = () => {
         'preview-url': '',
         jwt_key: '',
         api_key: '',
-        'max-quota': 0
+        'max-quota': -1
     };
 };
 const showCreateTool = () => {
@@ -235,7 +235,7 @@ const createTool = () => {
                     </label>
                     <label>
                         {{ $gettext('Max Quota') }}
-                        <input type="text" v-model="currentTool['max-quota']" />
+                        <input type="number" min="-1" v-model="currentTool['max-quota']" />
                     </label>
                 </form>
             </template>
