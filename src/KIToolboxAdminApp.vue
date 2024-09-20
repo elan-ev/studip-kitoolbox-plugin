@@ -19,3 +19,11 @@ onBeforeMount(async () => {
     <StudipProgressIndicator v-if="loadingTools" :description="$gettext('Lade Tools...')"/>
     <the-admin-tool-table v-else />
 </template>
+<style lang="scss">
+#kitoolbox-admin {
+    .ck-body-wrapper {
+        z-index: 3001;
+    }
+}
+
+</style>

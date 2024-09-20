@@ -10,31 +10,39 @@ const contextStore = useContextStore();
 
 const props = defineProps({
     tool: Object,
-    editMode: Boolean,
+    settingsEnabled: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const openEditDialog = ref(false);
 const toolClone = ref(null);
 
-const editModeHighlight = computed(() => {
-    if (props.editMode) {
-        if (toolTokenLimitReached.value) {
-            return 'warning-item';
-        }
-        return props.tool['active-in-course'] ? 'active-item' : 'inactive-item';
+const indicatorClass = computed(() => {
+    if (toolTokenLimitReached.value) {
+        return 'warning-item';
     }
+    return props.tool['active-in-course'] ? 'active-item' : 'inactive-item';
+});
+const toolTokenLimitReached = computed(() => {
+    const tool = props.tool.tool?.data ?? props.tool;
+
+    if (tool['max-quota'] === -1) {
+        return false;
+    }
+
+    return tool['max-quota'] <= tool['used-tokens'];
 });
 
 const toggleActiveState = (tool) => {
     courseToolsStore.toggleActiveState(tool);
 };
-
 const updateShowEditDialog = (state) => {
     openEditDialog.value = state;
 };
-
 const showEditTool = () => {
-    toolClone.value = JSON.parse(JSON.stringify(props.tool['course-tool']));
+    toolClone.value = JSON.parse(JSON.stringify(props.tool?.['course-tool']));
     updateShowEditDialog(true);
 };
 
@@ -59,100 +67,43 @@ const maxTokensUnlimited = computed(() => {
 const tokensPerUserUnlimited = computed(() => {
     return toolClone.value['tokens-per-user'] === -1;
 });
-
-const showRedirectLink = computed(() => {
-    return !props.editMode && Boolean(props.tool?.redirect);
-});
-
-const quotas = computed(() => {
-    return props.tool.quotas?.data;
-});
-
-const userQuotas = computed(() => {
-    return quotas.value.filter((quota) => quota.user.data.id === contextStore.userId);
-});
-
-const toolTokenLimit = computed(() => {
-    if (props.tool['max-tokens-unlimited'] || quotas === undefined) {
-        return null;
-    }
-    return props.tool['max-tokens'] - quotas.value.length;
-});
-
-const userTokenLimit = computed(() => {
-    if (props.tool['tokens-per-user-unlimited']) {
-        return null;
-    }
-
-    return props.tool['tokens-per-user'] - userQuotas.value.length;
-});
-
-const toolTokenLimitReached = computed(() => {
-    const tool = props.tool.tool?.data ?? props.tool;
-
-    return tool['max-quota'] <= tool['used-tokens'];
-});
-
-const itemAvailable = computed(() => {
-    if (contextStore.isTeacher) {
-        return true;
-    }
-
-    return userTokenLimit.value !== 0 && toolTokenLimit.value !== 0 && !toolTokenLimitReached.value;
-});
-
 const preview = computed(() => {
     return (
-        props.tool.preview || props.tool.tool?.data?.metadata?.image_url	||
+        props.tool.preview || props.tool.metadata?.image_url	||
         STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg')
     );
 });
 
 const name = computed(() => {
-    return props.tool.name || props.tool.tool.data.metadata.title[contextStore.preferredLanguage];
+    return props.tool.name || props.tool.metadata?.title[contextStore.preferredLanguage] || '---';
 });
 
 const description = computed(() => {
-    return props.tool.description || props.tool.tool.data.metadata.description[contextStore.preferredLanguage];
+    return props.tool.description || props.tool.metadata?.description[contextStore.preferredLanguage] || '---';
 });
+
 </script>
 
 <template>
-    <article class="kit-tool-item" :class="editModeHighlight">
+    <article class="kit-tool-item" :class="indicatorClass">
         <header class="kit-tool-item-head">
             <input
-                v-if="editMode"
                 type="checkbox"
                 :checked="tool['active-in-course']"
                 :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
                 @change="toggleActiveState(tool)"
             />
             <h2>{{ name }}</h2>
-            <button v-if="editMode" @click="showEditTool" :title="$gettext('Einstellungen')">
+            <button v-if="settingsEnabled" @click="showEditTool" :title="$gettext('Einstellungen')">
                 <StudipIcon shape="admin" />
             </button>
-            <div v-if="!editMode && !toolTokenLimitReached" class="kit-token-info">
-                <span v-if="toolTokenLimit !== null" :class="{ 'kit-token-warning': toolTokenLimit <= 0 }">
-                    {{ $gettext('Übrige Tokens') + ': ' + toolTokenLimit }}
-                </span>
-                <span
-                    v-if="!contextStore.isTeacher && userTokenLimit !== null"
-                    :class="{ 'kit-token-warning': userTokenLimit <= 0 }"
-                >
-                    <span v-if="toolTokenLimit !== null" class="seperator"> | </span>
-                    {{ $gettext('Ihre restlichen Tokens') + ': ' + userTokenLimit }}
-                </span>
-            </div>
-            <div v-if="toolTokenLimitReached" :class="{ 'kit-token-info': !editMode }">
-                <span class="kit-token-warning">{{ $gettext('Die Tokens für dieses Tool sind verbraucht!') }}</span>
-            </div>
         </header>
         <div class="kit-tool-item-body">
             <img :src="preview" aria-hidden="true" />
-            <p>{{ description }}</p>
+            <p v-html="description" class="formatted-content ck-content"></p>
         </div>
         <footer class="kit-tool-item-footer">
-            <a v-if="showRedirectLink && itemAvailable" :href="tool.redirect" target="_blank" class="button">
+            <a :href="tool.redirect" target="_blank" class="button">
                 {{ $gettext('Tool starten') }}
             </a>
         </footer>
@@ -200,9 +151,8 @@ const description = computed(() => {
 
 <style lang="scss">
 .kit-tool-item {
-    max-width: 870px;
     position: relative;
-    margin-bottom: 4em;
+    margin-bottom: 15px;
 
     &.active-item,
     &.inactive-item,

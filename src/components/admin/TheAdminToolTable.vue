@@ -2,8 +2,10 @@
 import { computed, ref } from 'vue';
 import StudipActionMenu from '../studip/StudipActionMenu.vue';
 import StudipDialog from '../studip/StudipDialog.vue';
+import StudipIcon from '../studip/StudipIcon.vue';
 import { useGettext } from 'vue3-gettext';
 import { useToolsStore } from './../../stores/tools';
+import StudipWysiwyg from '../studip/StudipWysiwyg.vue';
 const { $gettext } = useGettext();
 
 const openRemoveDialog = ref(false);
@@ -48,6 +50,7 @@ const updateShowEditDialog = (state) => {
 };
 const storeTool = () => {
     updateShowEditDialog(false);
+    currentTool.value.metadata = null;
     toolsStore.updateTool(currentTool.value);
     resetCurrentTool();
 };
@@ -64,7 +67,7 @@ const initNewTool = () => {
         'preview-url': '',
         jwt_key: '',
         api_key: '',
-        'max-quota': 0
+        'max-quota': -1
     };
 };
 const showCreateTool = () => {
@@ -89,11 +92,11 @@ const createTool = () => {
             </caption>
             <colgroup>
                 <col width="5%" />  <!-- aktiv -->
-                <col width="10%" /> <!-- url -->
+                <col width="30%" /> <!-- url -->
                 <col width="10%" /> <!-- preview-url -->
                 <col width="10%" /> <!-- jwt-schlüssel -->
-                <col width="20%" /> <!-- titel -->
-                <col width="30%" /> <!-- beschreibung -->
+                <col width="25%" /> <!-- titel -->
+                <col width="5%" /> <!-- beschreibung -->
                 <col width="5%" /> <!-- unterstütze quota -->
                 <col width="5%" /> <!-- maximale quota -->
                 <col width="5%" />  <!-- aktionen -->
@@ -117,7 +120,7 @@ const createTool = () => {
                         <input type="checkbox" :checked="tool.active" @change="toggleActiveState(tool)" />
                     </td>
                     <td>
-                        {{ tool.url || 'default' }}
+                        {{ tool.url || '-' }}
                     </td>
                     <td>
                         {{ tool.preview || 'default' }}
@@ -126,10 +129,10 @@ const createTool = () => {
                         {{ tool.jwt_key }}
                     </td>
                     <td>
-                        {{ tool.name || 'default' }}
+                        {{ tool.name || '-' }}
                     </td>
                     <td>
-                        {{ tool.description || 'default' }}
+                        <StudipIcon :shape="tool.description === '' ? 'decline' : 'accept'" role="info" />
                     </td>
                     <td>
                         {{ tool['quota-type'] }}
@@ -191,6 +194,7 @@ const createTool = () => {
         </studip-dialog>
         <studip-dialog
             :height="610"
+            :width="800"
             :open="openEditDialog"
             confirm-class="accept"
             :confirm-text="$gettext('Speichern')"
@@ -212,25 +216,26 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Preview-URL') }}
                         <input type="url" v-model="currentTool.preview" />
-                        <span class="tool-metadata">{{ currentTool.metadata.image_url }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.image_url }}</span>
                     </label>
                     <label>
                         {{ $gettext('Titel') }}
                         <input type="text" v-model="currentTool.name" />
-                        <span class="tool-metadata">{{ currentTool.metadata.title['de-DE'] }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.title['de-DE'] }}</span>
                     </label>
-                    <label>
+                    <label for="current-tool-description">
                         {{ $gettext('Beschreibung') }}
-                        <textarea v-model="currentTool.description"></textarea>
-                        <span class="tool-metadata">{{ currentTool.metadata.description['de-DE'] }}</span>
                     </label>
+                    <StudipWysiwyg id="current-tool-description"  v-model="currentTool.description"></StudipWysiwyg>
+                    <span class="tool-metadata">{{ currentTool.metadata?.description['de-DE'] }}</span>
+                    <br>
                     <label>
                         {{ $gettext('JWT Key') }}
                         <input type="text" v-model="currentTool.jwt_key" />
                     </label>
                     <label>
                         {{ $gettext('Max Quota') }}
-                        <input type="text" v-model="currentTool['max-quota']" />
+                        <input type="number" min="-1" v-model="currentTool['max-quota']" />
                     </label>
                 </form>
             </template>

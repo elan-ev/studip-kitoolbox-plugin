@@ -27,6 +27,7 @@
       "pinia": "^2.1.7"
     },
     "devDependencies": {
+      "@ckeditor/ckeditor5-vue": "^6.0.0",
       "@headlessui/vue": "^1.7.16",
       "@vitejs/plugin-vue": "^4.5.2",
       "kitsu": "^10.1.2",
