@@ -86,6 +86,7 @@ onBeforeMount(async () => {
     if (isTeacher) {
         await toolsStore.fetchTools();
         if (!hasRule.value) {
+            ruleContent.value = '';
             updateShowRulesDialog(true);
         } else {
             ruleReleased.value = rule.value.released;
@@ -122,6 +123,7 @@ onBeforeUnmount(() => {
                 <TheTeaserBox />
                 <TheInfoBox />
                 <TheRuleBox v-if="hasRule" @edit-rule="updateShowRulesDialog(true)" @release="releaseRule()" />
+                <button v-if="!hasRule && isTeacher" class="button" @click="updateShowRulesDialog(true)">{{ $gettext('Rules for Tools anlegen') }}</button>
             </div>
             <div id="kit-content-col">
                 <template v-if="isTeacher">
