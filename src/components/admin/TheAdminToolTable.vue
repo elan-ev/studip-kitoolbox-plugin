@@ -221,13 +221,13 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Titel') }}
                         <input type="text" v-model="currentTool.name" />
-                        <span class="tool-metadata">{{ currentTool.metadata?.title['de-DE'] }}</span>
+                        <span class="tool-metadata">{{ currentTool.metadata?.title?.['de-DE'] }}</span>
                     </label>
                     <label for="current-tool-description">
                         {{ $gettext('Beschreibung') }}
                     </label>
                     <StudipWysiwyg id="current-tool-description"  v-model="currentTool.description"></StudipWysiwyg>
-                    <span class="tool-metadata">{{ currentTool.metadata?.description['de-DE'] }}</span>
+                    <span class="tool-metadata">{{ currentTool.metadata?.description?.['de-DE'] }}</span>
                     <br>
                     <label>
                         {{ $gettext('JWT Key') }}
