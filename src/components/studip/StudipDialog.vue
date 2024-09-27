@@ -117,7 +117,9 @@ const initSize = () => {
             currentWidth.value = window.innerWidth - 16;
         }
 
-        top.value = (window.innerHeight - currentHeight.value) / 2;
+        const calcTop = (window.innerHeight - currentHeight.value) / 2;
+
+        top.value = calcTop > 0 ? calcTop : 0;
         footerHeight.value = footerRef.value.offsetHeight;
     });
 };

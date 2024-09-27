@@ -212,7 +212,7 @@ onBeforeUnmount(() => {
 .kit-rule-edit-wrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 20px;
     height: 100%;
     justify-content: space-between;
@@ -255,6 +255,21 @@ html:not(.size-large) {
 html.responsive-display {
     #kit-app-wrapper {
         margin: 0;
+    }
+
+    .kit-rule-edit-wrapper {
+        flex-direction: column;
+
+        .kit-rule-edit-info {
+            width: unset;
+            border-bottom: solid thin var(--light-gray-color-20);
+            border-right: none;
+        }
+        .kit-rule-edit-form {
+            max-width: unset;
+            padding-bottom: 2em;
+        }
+
     }
 }
 #kitoolbox-index {
