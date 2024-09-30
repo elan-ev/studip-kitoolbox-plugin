@@ -29,5 +29,11 @@ trait Routes
     }
     public function registerUnauthenticatedRoutes(\Slim\Routing\RouteCollectorProxy $group)
     {
+        // OpenID Connect Routes - not real JSONAPI routes
+        $group->any('/kitoolbox/authorize', Routes\OpenIDConnect\Authorize::class);
+        $group->post('/kitoolbox/access_token', Routes\OpenIDConnect\AccessToken::class);
+        $group->get('/kitoolbox/userinfo', Routes\OpenIDConnect\UserInfo::class);
+        $group->get('/kitoolbox/.well-known/openid-configuration', Routes\OpenIDConnect\Configuration::class);
+        $group->get('/kitoolbox/.well-known/jwks.json', Routes\OpenIDConnect\JWKS::class);
     }
 }

@@ -32,8 +32,12 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
         ];
 
         if ($isRoot) {
-            $attributes['jwt_key']  = (string) $resource['jwt_key'];
-            $attributes['api_key']  = (string) $resource['api_key'];
+            $attributes['auth_method']          = (string) $resource['auth_method'];
+            $attributes['oidc_client_id']       = (string) $resource['oidc_client_id'];
+            $attributes['oidc_client_secret']   = (string) $resource['oidc_client_secret'];
+            $attributes['oidc_redirect_url']    = (string) $resource['oidc_redirect_url'];
+            $attributes['jwt_key']              = (string) $resource['jwt_key'];
+            $attributes['api_key']              = (string) $resource['api_key'];
             $apiTool = null;
             if (!empty($resource['url']) && !empty($resource['api_key'])) {
                 $apiTool = new ToolApi($resource['url'], $resource['api_key']);

@@ -32,14 +32,21 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
             'tokens-per-user-unlimited' => (int) $resource->tokensPerUserUnlimited(),
         ];
 
-        $attributes['redirect'] =  \PluginEngine::getURL(
-            'kitoolbox',
-            [
-                'cid' => $resource['course_id'],
-                'ktcid' => $resource['tool_id']
-            ],
-            'index/redirect'
-        );
+        switch ($resource['tool']['auth_method']) {
+            case 'oidc':
+                $attributes['redirect'] = $resource['tool']['url'];
+                break;
+            case 'jwt':
+                $attributes['redirect'] =  \PluginEngine::getURL(
+                    'kitoolbox',
+                    [
+                        'cid' => $resource['course_id'],
+                        'ktcid' => $resource['tool_id']
+                    ],
+                    'index/redirect'
+                );
+                break;
+        }
 
         return $attributes;
     }

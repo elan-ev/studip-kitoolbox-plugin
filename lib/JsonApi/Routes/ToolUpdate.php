@@ -64,6 +64,22 @@ class ToolUpdate extends JsonApiController
             $resource->preview_url = $json['data']['attributes']['preview'];
         }
 
+        if (isset($json['data']['attributes']['auth_method'])) {
+            $resource->auth_method = $json['data']['attributes']['auth_method'];
+        }
+
+        if (isset($json['data']['attributes']['oidc_client_id'])) {
+            $resource->oidc_client_id = $json['data']['attributes']['oidc_client_id'];
+        }
+
+        if (isset($json['data']['attributes']['oidc_client_secret'])) {
+            $resource->oidc_client_secret = $json['data']['attributes']['oidc_client_secret'];
+        }
+
+        if (isset($json['data']['attributes']['oidc_redirect_url'])) {
+            $resource->oidc_redirect_url = $json['data']['attributes']['oidc_redirect_url'];
+        }
+
         if (isset($json['data']['attributes']['jwt_key'])) {
             $resource->jwt_key = $json['data']['attributes']['jwt_key'];
         }
