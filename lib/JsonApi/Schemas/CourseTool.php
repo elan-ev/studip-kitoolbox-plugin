@@ -41,7 +41,7 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
                     'kitoolbox',
                     [
                         'cid' => $resource['course_id'],
-                        'ktcid' => $resource['tool_id']
+                        'ktcid' => $resource['id']
                     ],
                     'index/redirect'
                 );
