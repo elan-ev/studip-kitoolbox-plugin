@@ -20,7 +20,7 @@
     },
     "require": {
         "php": "^7.0 || ^8.0",
-        "lcobucci/jwt": "^4.0.4",
+        "lcobucci/jwt": "4.3.0",
         "guzzlehttp/guzzle": ">=7.5.1",
         "steverhoades/oauth2-openid-connect-server": "^2.6"
     }
