@@ -34,34 +34,42 @@ class ToolCreate extends JsonApiController
             return 'Missing `data` member at document´s top level.';
         }
         if (!self::arrayHas($json, 'data.attributes.auth_method')) {
-            return 'New document must not have an `auth_method`.';
+            return 'New document must have an `auth_method`.';
         }
-        if (!self::arrayHas($json, 'data.attributes.oidc_client_id')) {
-            return 'New document must not have an `oidc_client_id`.';
+
+        switch (self::arrayGet($json, 'data.attributes.auth_method', 'oidc')) {
+            case 'oidc':
+                if (!self::arrayHas($json, 'data.attributes.oidc_client_id')) {
+                    return 'New document must have an `oidc_client_id`.';
+                }
+                if (!self::arrayHas($json, 'data.attributes.oidc_client_secret')) {
+                    return 'New document must have an `oidc_client_secret`.';
+                }
+                if (!self::arrayHas($json, 'data.attributes.oidc_redirect_url')) {
+                    return 'New document must have an `oidc_redirect_url`.';
+                }
+                break;
+            case 'jwt':
+                if (!self::arrayHas($json, 'data.attributes.jwt_key')) {
+                    return 'New document must have an `jwt_key`.';
+                }
+                break;
         }
-        if (!self::arrayHas($json, 'data.attributes.oidc_client_secret')) {
-            return 'New document must not have an `oidc_client_secret`.';
-        }
-        if (!self::arrayHas($json, 'data.attributes.oidc_redirect_url')) {
-            return 'New document must not have an `oidc_redirect_url`.';
-        }
-        if (!self::arrayHas($json, 'data.attributes.jwt_key')) {
-            return 'New document must not have an `jwt_key`.';
-        }
+
         if (!self::arrayHas($json, 'data.attributes.api_key')) {
-            return 'New document must not have an `api_key`.';
+            return 'New document must have an `api_key`.';
         }
         if (!self::arrayHas($json, 'data.attributes.url')) {
-            return 'New document must not have an `url`.';
+            return 'New document must have an `url`.';
         }
         if (!self::arrayHas($json, 'data.attributes.name')) {
-            return 'New document must not have an `name`.';
+            return 'New document must have an `name`.';
         }
         if (!self::arrayHas($json, 'data.attributes.description')) {
-            return 'New document must not have an `description`.';
+            return 'New document must have an `description`.';
         }
         if (!self::arrayHas($json, 'data.attributes.max-quota')) {
-            return 'New document must not have an `max-quota`.';
+            return 'New document must have an `max-quota`.';
         }
     }
 
