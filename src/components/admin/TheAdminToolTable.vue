@@ -109,16 +109,23 @@ const createTool = () => {
             <caption>
                 KI-Tools
             </caption>
+            <colgroup>
+                <col width="5%" />  <!-- aktiv -->
+                <col width="30%" /> <!-- url -->
+                <col width="10%" /> <!-- preview-url -->
+                <col width="10%" /> <!-- authentication -->
+                <col width="25%" /> <!-- titel -->
+                <col width="5%" /> <!-- beschreibung -->
+                <col width="5%" /> <!-- unterstütze quota -->
+                <col width="5%" /> <!-- maximale quota -->
+                <col width="5%" />  <!-- aktionen -->
+            </colgroup>
             <thead>
                 <tr>
                     <th>{{ $gettext('Aktiv') }}</th>
                     <th>{{ $gettext('URL') }}</th>
                     <th>{{ $gettext('Preview-URL') }}</th>
                     <th>{{ $gettext('Authentifizierung') }}</th>
-                    <th>{{ $gettext('OIDC Client ID') }}</th>
-                    <th>{{ $gettext('OIDC Client Secret ') }}</th>
-                    <th>{{ $gettext('OIDC Redirect URL ') }}</th>
-                    <th>{{ $gettext('JWT Schlüssel') }}</th>
                     <th>{{ $gettext('Title') }}</th>
                     <th>{{ $gettext('Beschreibung') }}</th>
                     <th>{{ $gettext('Unterstützte Quota') }}</th>
@@ -139,18 +146,6 @@ const createTool = () => {
                     </td>
                     <td>
                         {{ tool.auth_method || 'none' }}
-                    </td>
-                    <td>
-                        {{ tool.oidc_client_id }}
-                    </td>
-                    <td>
-                        {{ tool.oidc_client_secret }}
-                    </td>
-                    <td>
-                        {{ tool.oidc_redirect_url }}
-                    </td>
-                    <td>
-                        {{ tool.jwt_key }}
                     </td>
                     <td>
                         {{ tool.name || '-' }}
