@@ -2,7 +2,6 @@
 
 namespace KIToolbox\OpenIDConnect;
 
-use KIToolbox\OpenIDConnect\IdTokenResponse;
 use KIToolbox\OpenIDConnect\Repositories\AccessTokenRepository;
 use KIToolbox\OpenIDConnect\Repositories\AuthCodeRepository;
 use KIToolbox\OpenIDConnect\Repositories\ClientRepository;

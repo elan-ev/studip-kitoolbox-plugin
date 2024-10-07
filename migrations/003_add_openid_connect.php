@@ -48,7 +48,7 @@ final class AddOpenidConnect extends Migration
 
 
         DBManager::get()->exec("ALTER TABLE `kit_tools` 
-            ADD COLUMN `auth_method`           ENUM('oidc', 'jwt') NULL,
+            ADD COLUMN `auth_method`           ENUM('oidc', 'jwt', 'none'),
             ADD COLUMN `oidc_client_id`        MEDIUMTEXT NULL UNIQUE,
             ADD COLUMN `oidc_client_secret`    MEDIUMTEXT NULL,
             ADD COLUMN `oidc_redirect_url`     MEDIUMTEXT NULL");

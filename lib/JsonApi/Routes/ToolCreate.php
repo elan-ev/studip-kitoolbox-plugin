@@ -37,7 +37,7 @@ class ToolCreate extends JsonApiController
             return 'New document must have an `auth_method`.';
         }
 
-        switch (self::arrayGet($json, 'data.attributes.auth_method', 'oidc')) {
+        switch (self::arrayGet($json, 'data.attributes.auth_method', 'none')) {
             case 'oidc':
                 if (!self::arrayHas($json, 'data.attributes.oidc_client_id')) {
                     return 'New document must have an `oidc_client_id`.';
@@ -75,7 +75,7 @@ class ToolCreate extends JsonApiController
 
     private function createTool(array $json): Tool
     {
-        $auth_method = self::arrayGet($json, 'data.attributes.auth_method', 'oidc');
+        $auth_method = self::arrayGet($json, 'data.attributes.auth_method', 'none');
         $oidc_client_id = self::arrayGet($json, 'data.attributes.oidc_client_id', '');
         $oidc_client_secret = self::arrayGet($json, 'data.attributes.oidc_client_secret', '');
         $oidc_redirect_url = self::arrayGet($json, 'data.attributes.oidc_redirect_url', '');

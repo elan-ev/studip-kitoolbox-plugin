@@ -50,13 +50,13 @@ const updateShowEditDialog = (state) => {
 };
 const cleanAuthentication = () => {
     // Clean up unrelated authentication configs based on selected auth method
-    if (currentTool.value.auth_method === 'jwt' || currentTool.value.auth_method === '') {
+    if (currentTool.value.auth_method === 'jwt' || currentTool.value.auth_method === 'none') {
         currentTool.value.oidc_client_id = '';
         currentTool.value.oidc_client_secret = '';
         currentTool.value.oidc_redirect_url = '';
     }
 
-    if (currentTool.value.auth_method === 'oidc' || currentTool.value.auth_method === '') {
+    if (currentTool.value.auth_method === 'oidc' || currentTool.value.auth_method === 'none') {
         currentTool.value.jwt_key = '';
     }
 }
@@ -78,7 +78,7 @@ const initNewTool = () => {
         description: '',
         url: '',
         'preview-url': '',
-        auth_method: '',
+        auth_method: 'none',
         oidc_client_id: '',
         // oidc configs
         oidc_client_secret: '',
@@ -138,7 +138,7 @@ const createTool = () => {
                         {{ tool.preview || 'default' }}
                     </td>
                     <td>
-                        {{ tool.auth_method || '-' }}
+                        {{ tool.auth_method || 'none' }}
                     </td>
                     <td>
                         {{ tool.oidc_client_id }}
@@ -256,7 +256,7 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Authentifizierung') }}
                         <select v-model="currentTool.auth_method">
-                            <option value="">{{ $gettext('Keine Authentifizierung') }}</option>
+                            <option value="none">{{ $gettext('Keine Authentifizierung') }}</option>
                             <option value="oidc">{{ $gettext('OpenID Connect (OIDC)') }}</option>
                             <option value="jwt">{{ $gettext('JSON Web Token (JWT)') }}</option>
                         </select>
@@ -311,7 +311,7 @@ const createTool = () => {
                     <label>
                         {{ $gettext('Authentifizierung') }}
                         <select v-model="newTool.auth_method">
-                            <option value="">{{ $gettext('Keine Authentifizierung') }}</option>
+                            <option value="none">{{ $gettext('Keine Authentifizierung') }}</option>
                             <option value="oidc">{{ $gettext('OpenID Connect (OIDC)') }}</option>
                             <option value="jwt">{{ $gettext('JSON Web Token (JWT)') }}</option>
                         </select>
