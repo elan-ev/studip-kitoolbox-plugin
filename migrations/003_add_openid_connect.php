@@ -48,10 +48,10 @@ final class AddOpenidConnect extends Migration
 
 
         DBManager::get()->exec("ALTER TABLE `kit_tools` 
-            ADD COLUMN `auth_method`           ENUM('oidc', 'jwt', 'none'),
-            ADD COLUMN `oidc_client_id`        MEDIUMTEXT NULL UNIQUE,
-            ADD COLUMN `oidc_client_secret`    MEDIUMTEXT NULL,
-            ADD COLUMN `oidc_redirect_url`     MEDIUMTEXT NULL");
+            ADD `auth_method`           ENUM('none', 'oidc', 'jwt') DEFAULT 'none' NOT NULL,
+            ADD `oidc_client_id`        MEDIUMTEXT NULL UNIQUE,
+            ADD `oidc_client_secret`    MEDIUMTEXT NULL,
+            ADD `oidc_redirect_url`     MEDIUMTEXT NULL");
     }
     public function down()
     {
@@ -61,9 +61,9 @@ final class AddOpenidConnect extends Migration
         $cfg->delete('KITOOLBOX_OIDC_ENCRYPTION_KEY');
 
         DBManager::get()->exec("ALTER TABLE `kit_tools` 
-            DROP COLUMN `auth_method`,
-            DROP COLUMN `oidc_client_id`,
-            DROP COLUMN `oidc_client_secret`,
-            DROP COLUMN `oidc_redirect_url`");
+            DROP `auth_method`,
+            DROP `oidc_client_id`,
+            DROP `oidc_client_secret`,
+            DROP `oidc_redirect_url`");
     }
 }

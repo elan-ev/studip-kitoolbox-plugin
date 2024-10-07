@@ -33,6 +33,7 @@ class CourseTool extends \JsonApi\Schemas\SchemaProvider
         ];
 
         switch ($resource['tool']['auth_method']) {
+            case 'none':
             case 'oidc':
                 $attributes['redirect'] = $resource['tool']['url'];
                 break;
