@@ -76,7 +76,7 @@ class ToolCreate extends JsonApiController
     private function createTool(array $json): Tool
     {
         $auth_method = self::arrayGet($json, 'data.attributes.auth_method', 'none');
-        $oidc_client_id = self::arrayGet($json, 'data.attributes.oidc_client_id', '');
+        $oidc_client_id = self::arrayGet($json, 'data.attributes.oidc_client_id', null);
         $oidc_client_secret = self::arrayGet($json, 'data.attributes.oidc_client_secret', '');
         $oidc_redirect_url = self::arrayGet($json, 'data.attributes.oidc_redirect_url', '');
         $jwt_key = self::arrayGet($json, 'data.attributes.jwt_key', '');

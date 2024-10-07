@@ -33,7 +33,7 @@ class Tool extends \JsonApi\Schemas\SchemaProvider
 
         if ($isRoot) {
             $attributes['auth_method']          = (string) $resource['auth_method'];
-            $attributes['oidc_client_id']       = (string) $resource['oidc_client_id'];
+            $attributes['oidc_client_id']       = $resource['oidc_client_id'];
             $attributes['oidc_client_secret']   = (string) $resource['oidc_client_secret'];
             $attributes['oidc_redirect_url']    = (string) $resource['oidc_redirect_url'];
             $attributes['jwt_key']              = (string) $resource['jwt_key'];

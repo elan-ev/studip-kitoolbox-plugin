@@ -51,7 +51,7 @@ const updateShowEditDialog = (state) => {
 const cleanAuthentication = () => {
     // Clean up unrelated authentication configs based on selected auth method
     if (currentTool.value.auth_method === 'jwt' || currentTool.value.auth_method === 'none') {
-        currentTool.value.oidc_client_id = '';
+        currentTool.value.oidc_client_id = null;
         currentTool.value.oidc_client_secret = '';
         currentTool.value.oidc_redirect_url = '';
     }
@@ -79,7 +79,7 @@ const initNewTool = () => {
         url: '',
         'preview-url': '',
         auth_method: 'none',
-        oidc_client_id: '',
+        oidc_client_id: null,
         // oidc configs
         oidc_client_secret: '',
         oidc_redirect_url: '',
