@@ -55,14 +55,19 @@ class AuthorizationServer
             $responseType
         );
 
+        $authCodeGrant = new AuthCodeGrant(
+            $authCodeRepository,
+            $refreshTokenRepository,
+            new \DateInterval('PT1M')  // Auth Code: 1 minute TTL
+        );
+
+        // Refresh Token: 1 minute TTL
+        $authCodeGrant->setRefreshTokenTTL(new \DateInterval('PT1M'));
+
         // Enable the authentication code grant on the server
         $server->enableGrantType(
-            new AuthCodeGrant(
-                $authCodeRepository,
-                $refreshTokenRepository,
-                new \DateInterval('PT10M')  // Auth Code: 10 Minutes TTL
-            ),
-            new \DateInterval('PT1H') // Access Token: 1 hour TTL
+            $authCodeGrant,
+            new \DateInterval('PT1M') // Access Token: 1 minute TTL
         );
 
         return $server;
