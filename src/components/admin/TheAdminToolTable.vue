@@ -48,9 +48,22 @@ const showEditTool = (tool) => {
 const updateShowEditDialog = (state) => {
     openEditDialog.value = state;
 };
+const cleanAuthentication = () => {
+    // Clean up unrelated authentication configs based on selected auth method
+    if (currentTool.value.auth_method === 'jwt' || currentTool.value.auth_method === 'none') {
+        currentTool.value.oidc_client_id = null;
+        currentTool.value.oidc_client_secret = '';
+        currentTool.value.oidc_redirect_url = '';
+    }
+
+    if (currentTool.value.auth_method === 'oidc' || currentTool.value.auth_method === 'none') {
+        currentTool.value.jwt_key = '';
+    }
+}
 const storeTool = () => {
     updateShowEditDialog(false);
     currentTool.value.metadata = null;
+    cleanAuthentication();
     toolsStore.updateTool(currentTool.value);
     resetCurrentTool();
 };
@@ -65,6 +78,12 @@ const initNewTool = () => {
         description: '',
         url: '',
         'preview-url': '',
+        auth_method: 'none',
+        oidc_client_id: null,
+        // oidc configs
+        oidc_client_secret: '',
+        oidc_redirect_url: '',
+        // jwt config
         jwt_key: '',
         api_key: '',
         'max-quota': -1
@@ -94,7 +113,7 @@ const createTool = () => {
                 <col width="5%" />  <!-- aktiv -->
                 <col width="30%" /> <!-- url -->
                 <col width="10%" /> <!-- preview-url -->
-                <col width="10%" /> <!-- jwt-schlüssel -->
+                <col width="10%" /> <!-- authentication -->
                 <col width="25%" /> <!-- titel -->
                 <col width="5%" /> <!-- beschreibung -->
                 <col width="5%" /> <!-- unterstütze quota -->
@@ -106,7 +125,7 @@ const createTool = () => {
                     <th>{{ $gettext('Aktiv') }}</th>
                     <th>{{ $gettext('URL') }}</th>
                     <th>{{ $gettext('Preview-URL') }}</th>
-                    <th>{{ $gettext('JWT Schlüssel') }}</th>
+                    <th>{{ $gettext('Authentifizierung') }}</th>
                     <th>{{ $gettext('Title') }}</th>
                     <th>{{ $gettext('Beschreibung') }}</th>
                     <th>{{ $gettext('Unterstützte Quota') }}</th>
@@ -126,7 +145,7 @@ const createTool = () => {
                         {{ tool.preview || 'default' }}
                     </td>
                     <td>
-                        {{ tool.jwt_key }}
+                        {{ tool.auth_method || 'none' }}
                     </td>
                     <td>
                         {{ tool.name || '-' }}
@@ -170,7 +189,7 @@ const createTool = () => {
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="13">
                         <div class="footer-items">
                             <button class="button add" @click="showCreateTool">
                                 {{ $gettext('Tool hinzufügen') }}
@@ -230,9 +249,33 @@ const createTool = () => {
                     <span class="tool-metadata">{{ currentTool.metadata?.description?.['de-DE'] }}</span>
                     <br>
                     <label>
-                        {{ $gettext('JWT Key') }}
-                        <input type="text" v-model="currentTool.jwt_key" />
+                        {{ $gettext('Authentifizierung') }}
+                        <select v-model="currentTool.auth_method">
+                            <option value="none">{{ $gettext('Keine Authentifizierung') }}</option>
+                            <option value="oidc">{{ $gettext('OpenID Connect (OIDC)') }}</option>
+                            <option value="jwt">{{ $gettext('JSON Web Token (JWT)') }}</option>
+                        </select>
                     </label>
+                    <div v-show="currentTool.auth_method === 'oidc'">
+                        <label>
+                            {{ $gettext('OIDC Client ID') }}
+                            <input type="text" v-model="currentTool.oidc_client_id" />
+                        </label>
+                        <label>
+                            {{ $gettext('OIDC Client Secret') }}
+                            <input type="text" v-model="currentTool.oidc_client_secret" />
+                        </label>
+                        <label>
+                            {{ $gettext('OIDC Redirect URL') }}
+                            <input type="url" v-model="currentTool.oidc_redirect_url" />
+                        </label>
+                    </div>
+                    <div v-show="currentTool.auth_method === 'jwt'">
+                        <label>
+                            {{ $gettext('JWT Key') }}
+                            <input type="text" v-model="currentTool.jwt_key" />
+                        </label>
+                    </div>
                     <label>
                         {{ $gettext('Max Quota') }}
                         <input type="number" min="-1" v-model="currentTool['max-quota']" />
@@ -261,9 +304,33 @@ const createTool = () => {
                         <input type="text" v-model="newTool.api_key" />
                     </label>
                     <label>
-                        {{ $gettext('JWT Key') }}
-                        <input type="text" v-model="newTool.jwt_key" />
+                        {{ $gettext('Authentifizierung') }}
+                        <select v-model="newTool.auth_method">
+                            <option value="none">{{ $gettext('Keine Authentifizierung') }}</option>
+                            <option value="oidc">{{ $gettext('OpenID Connect (OIDC)') }}</option>
+                            <option value="jwt">{{ $gettext('JSON Web Token (JWT)') }}</option>
+                        </select>
                     </label>
+                    <div v-show="newTool.auth_method === 'oidc'">
+                        <label>
+                            {{ $gettext('OIDC Client ID') }}
+                            <input type="text" v-model="newTool.oidc_client_id" />
+                        </label>
+                        <label>
+                            {{ $gettext('OIDC Client Secret') }}
+                            <input type="text" v-model="newTool.oidc_client_secret" />
+                        </label>
+                        <label>
+                            {{ $gettext('OIDC Redirect URL') }}
+                            <input type="url" v-model="newTool.oidc_redirect_url" />
+                        </label>
+                    </div>
+                    <div v-show="newTool.auth_method === 'jwt'">
+                        <label>
+                            {{ $gettext('JWT Key') }}
+                            <input type="text" v-model="newTool.jwt_key" />
+                        </label>
+                    </div>
                 </form>
             </template>
         </studip-dialog>

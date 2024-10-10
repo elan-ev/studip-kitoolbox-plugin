@@ -75,11 +75,11 @@ const preview = computed(() => {
 });
 
 const name = computed(() => {
-    return props.tool.name || props.tool.metadata?.title[contextStore.preferredLanguage] || '---';
+    return props.tool.name || props.tool.metadata?.title?.[contextStore.preferredLanguage] || '---';
 });
 
 const description = computed(() => {
-    return props.tool.description || props.tool.metadata?.description[contextStore.preferredLanguage] || '---';
+    return props.tool.description || props.tool.metadata?.description?.[contextStore.preferredLanguage] || '---';
 });
 
 </script>
