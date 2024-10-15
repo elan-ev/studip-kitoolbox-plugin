@@ -15,6 +15,7 @@ import TheTeaserBox from './components/course/TheTeaserBox.vue';
 import StudipWysiwyg from './components/studip/StudipWysiwyg.vue';
 
 import { ruleTemplate } from './static-strings.js';
+import TheSettingsInfoBox from './components/course/TheSettingsInfoBox.vue';
 
 const contextStore = useContextStore();
 const toolsStore = useToolsStore();
@@ -27,11 +28,15 @@ const openRulesDialog = ref(false);
 const ruleContent = ref(null);
 const ruleReleased = ref(false);
 
+
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
 });
 const appLoaded = computed(() => {
     return contextStore.appLoaded;
+});
+const exploreMode = computed(()=> {
+    return contextStore.exploreMode;
 });
 
 const hasRule = computed(() => {
@@ -40,6 +45,10 @@ const hasRule = computed(() => {
 
 const rule = computed(() => {
     return hasRule.value ? rulesStore.all[0] : null;
+});
+
+const showSettingsInfo = computed(()=> {
+    return (!hasRule.value || !rule.value.released || rule.value.content === '') && !exploreMode.value;
 });
 
 const updateShowRulesDialog = (state) => {
@@ -62,6 +71,8 @@ const storeRules = () => {
         };
         rulesStore.createRule(rule);
     }
+
+    contextStore.setExploreMode(false);
 };
 
 const releaseRule = () => {
@@ -73,11 +84,14 @@ const releaseRule = () => {
     };
     rulesStore.updateRule(updatedRule);
     ruleReleased.value = true;
+    contextStore.setExploreMode(false);
 };
 
 const insertRuleTemplate = () => {
     ruleContent.value = ruleTemplate;
 };
+
+
 
 onBeforeMount(async () => {
     await courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
@@ -87,15 +101,12 @@ onBeforeMount(async () => {
         await toolsStore.fetchTools();
         if (!hasRule.value) {
             ruleContent.value = '';
-            updateShowRulesDialog(true);
         } else {
             ruleReleased.value = rule.value.released;
             ruleContent.value = rule.value.content;
-            if (ruleContent.value === '' || !ruleReleased.value) {
-                updateShowRulesDialog(true);
-            }
         }
     }
+
     contextStore.setAppLoaded(true);
 
     courseToolInterval.value = setInterval(() => {
@@ -121,13 +132,14 @@ onBeforeUnmount(() => {
         <div id="kit-app-wrapper">
             <div id="kit-info-col">
                 <TheTeaserBox />
-                <TheInfoBox />
-                <TheRuleBox v-if="hasRule" @edit-rule="updateShowRulesDialog(true)" @release="releaseRule()" />
-                <button v-if="!hasRule && isTeacher" class="button" @click="updateShowRulesDialog(true)">{{ $gettext('Rules for Tools anlegen') }}</button>
+                <TheInfoBox v-if="!showSettingsInfo"/>
+                <TheRuleBox v-if="hasRule && !showSettingsInfo" @edit-rule="updateShowRulesDialog(true)" @release="releaseRule()" />
+                <button v-if="!hasRule && isTeacher && !showSettingsInfo" class="button" @click="updateShowRulesDialog(true)">{{ $gettext('Rules for Tools anlegen') }}</button>
             </div>
             <div id="kit-content-col">
                 <template v-if="isTeacher">
-                    <TheToolList />
+                    <TheSettingsInfoBox v-if="showSettingsInfo" @show-rule-dialog="updateShowRulesDialog(true)" @enable-explore-mode="contextStore.setExploreMode(true)" />
+                    <TheToolList v-if="!showSettingsInfo" />
                     <StudipDialog
                         v-if="isTeacher"
                         :height="640"
@@ -135,7 +147,7 @@ onBeforeUnmount(() => {
                         :open="openRulesDialog"
                         confirm-class="accept"
                         :confirm-text="$gettext('Speichern')"
-                        :close-text="hasRule ? $gettext('Abbrechen') : $gettext('Erstmal umschauen')"
+                        :close-text="$gettext('Abbrechen')"
                         :title="$gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools')"
                         @update:open="updateShowRulesDialog"
                         @confirm="storeRules"
@@ -207,6 +219,11 @@ onBeforeUnmount(() => {
     #kit-info-col {
         max-width: 600px;
         flex-grow: 1;
+    }
+
+    #kit-content-col {
+        width: 100%;
+        max-width: 860px;
     }
 }
 .kit-rule-edit-wrapper {

@@ -1,6 +1,13 @@
 <script setup>
 import StudipIcon from '../studip/StudipIcon.vue';
+import { computed } from 'vue';
+import { useContextStore } from '../../stores/context';
 
+const contextStore = useContextStore();
+
+const isTeacher = computed(() => {
+    return contextStore.isTeacher;
+});
 </script>
 
 <template>
@@ -10,15 +17,18 @@ import StudipIcon from '../studip/StudipIcon.vue';
             <header>
                 <h1>{{ $gettext('KI-Toolbox') }}</h1>
             </header>
-            <p>
-                Die KI-Toolbox bietet einen direkten Zugriff auf alle KI-Tools, die an der 
-                Uni Osnabrück hochschulweit zur Verfügung stehen. Lehrende haben die Möglichkeit, 
-                aus den verfügbaren KI-Werkzeugen jene auszuwählen und zu aktivieren, die sie in 
-                ihrer Lehrveranstaltung gemeinsam mit den Studierenden nutzen wollen. Außerdem 
-                bietet die KI-Toolbox einen zentralen Ort, an dem Lehrende Regeln für Nutzung von 
-                KI-Tools in ihrer Lehrveranstaltung hinterlegen können.Studierende finden über den 
-                KI-Toolbox-Reiter die in der Lehrveranstaltung geltenden „Rules for Tools“ und 
-                können auf die KI-Werkzeuge zugreifen, die in der Lehrveranstaltung genutzt werden dürfen.
+            <p v-if="isTeacher">
+                Die KI-Toolbox bietet einen direkten Zugriff auf alle KI-Tools, die an der Uni Osnabrück hochschulweit
+                zur Verfügung stehen. Als Lehrende haben Sie die Möglichkeit, aus den verfügbaren KI-Werkzeugen jene
+                auszuwählen und zu aktivieren, die Sie in Ihrer Lehrveranstaltung gemeinsam mit den Studierenden nutzen
+                wollen. Außerdem bietet die KI-Toolbox einen zentralen Ort, an dem Sie Regeln für Nutzung von KI-Tools
+                in Ihrer Lehrveranstaltung hinterlegen können.
+            </p>
+            <p v-else>
+                Die KI-Toolbox bietet einen direkten Zugriff auf ausgewählte KI-Tools, die an der Uni Osnabrück
+                hochschulweit zur Verfügung stehen. Sie finden über den KI-Toolbox-Reiter die in der Lehrveranstaltung
+                geltenden „Rules for Tools“ und können auf die KI-Werkzeuge zugreifen, die in dieser Lehrveranstaltung
+                genutzt werden dürfen.
             </p>
         </article>
     </section>
