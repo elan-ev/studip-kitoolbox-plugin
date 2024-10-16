@@ -6,16 +6,44 @@
                 <h1>{{ $gettext('Einrichtung der Rules for Tools') }}</h1>
             </header>
             <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-                ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-                magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                Rules for Tools sind spezielle Regeln, die die Nutzung KI-basierter Anwendungen in einer Veranstaltung
+                rahmen. Über die Rules for Tools können Sie Ihren Studierenden vermitteln, welche Tools sie zu welchen
+                Zwecken und in welchem Umfang in Ihrer Veranstaltung nutzen dürfen. Genauere Informationen zu den Rules
+                for Tools finden Sie auf unserem
+                <a href="https://digitale-lehre.uni-osnabrueck.de/wie-kann-ich-ki-in-der-lehre-nutzen/" target="_blank">Digitale-Lehre-Portal</a>. 
+            </p>
+            <p>
+                Fragen können bei der Erstellung von Rules for Tools hilfreich sein:
+            </p>
+            <p>  
+                <ul>
+                    <li>
+                        Möchten Sie KI-Tools in Ihrer Veranstaltung zulassen? Wenn ja, welche und unter welchen Umständen? Wenn nein, warum nicht?
+                    </li>
+                    <li>
+                        Wozu möchten Sie Studierende verpflichten, wenn sie KI-Tools nutzen?
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Falls Sie Ihre Rules for Tools nicht
+                komplett selbst formulieren möchten, können Sie auch die frei lizensierte Vorlage von Dr. Christian
+                Spannagel verwenden. Die Vorlage können Sie nach Ihren Vorstellungen modifizieren. 
+            </p>
+            <p>
+                Bitte beachten Sie:
+                Erst nachdem Sie die Einrichtung der Rules for Tools abgeschlossen und gespeichert haben, können Sie
+                Tools für die Studierenden im Kurs aktivieren. Natürlich können Sie sich auch entscheiden, keine Rules
+                for Tools zu definieren, lassen Sie hierfür einfach das Textfeld im Dialog leer und klicken auf
+                Speichern.
             </p>
             <div class="kit-button-wrapper">
-                <button class="button" @click="$emit('show-rule-dialog')">{{ $gettext('Rules for Tools anlegen') }}</button>
-                <button class="button" @click="$emit('enable-explore-mode')">{{ $gettext('Erstmal umschauen') }}</button>
+                <button class="button" @click="$emit('show-rule-dialog')">
+                    {{ $gettext('Rules for Tools anlegen') }}
+                </button>
+                <button class="button" @click="$emit('enable-explore-mode')">
+                    {{ $gettext('Erstmal umschauen') }}
+                </button>
             </div>
         </article>
     </section>
