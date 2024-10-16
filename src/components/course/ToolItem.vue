@@ -34,6 +34,9 @@ const toolTokenLimitReached = computed(() => {
 
     return tool['max-quota'] <= tool['used-tokens'];
 });
+const exploreMode = computed(()=> {
+    return contextStore.exploreMode;
+});
 
 const toggleActiveState = (tool) => {
     courseToolsStore.toggleActiveState(tool);
@@ -90,8 +93,9 @@ const description = computed(() => {
             <input
                 type="checkbox"
                 :checked="tool['active-in-course']"
-                :title="tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
+                :title="exploreMode ? $gettext('Bitte legen Sie erst die Rules for Tools an') : tool['active-in-course'] ? $gettext('KI-Tool deaktivieren') : $gettext('KI-Tool aktivieren')"
                 @change="toggleActiveState(tool)"
+                :disabled="exploreMode"
             />
             <h2>{{ name }}</h2>
             <button v-if="settingsEnabled" @click="showEditTool" :title="$gettext('Einstellungen')">

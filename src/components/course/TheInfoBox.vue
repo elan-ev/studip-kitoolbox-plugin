@@ -1,9 +1,4 @@
 <script setup>
-import { computed } from 'vue';
-import { useContextStore } from '../../stores/context';
-const isTeacher = computed(() => {
-    return contextStore.isTeacher;
-});
 </script>
 <template>
     <form class="default kit-info-box collapsable"  @submit.prevent>
