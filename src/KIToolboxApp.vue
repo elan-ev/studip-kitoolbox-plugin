@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
                                         </button>
                                         <br />
                                         <label for="rule-released">
-                                            {{ $gettext('Veröffentlicht') }}
+                                            {{ $gettext('Sichtbar für Studierende') }}
                                         </label>
                                         <select id="rule-released" v-model="ruleReleased">
                                             <option :value="false">{{ $gettext('Nein') }}</option>

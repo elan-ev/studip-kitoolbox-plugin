@@ -29,7 +29,7 @@ const showRule = computed(() => {
                 <p v-html="rule.content"></p>
                 <div class="kit-rule-buttons-wrapper" v-if="isTeacher">
                     <button class="button" @click="$emit('edit-rule')">{{ $gettext('Bearbeiten') }}</button>
-                    <button v-if="!rule.released" class="button" @click="$emit('release')">{{ $gettext('Veröffentlichen') }}</button>
+                    <button v-if="!rule.released" class="button" @click="$emit('release')">{{ $gettext('Für Studierende sichtbar schalten') }}</button>
                 </div>
             </article>
         </fieldset>
