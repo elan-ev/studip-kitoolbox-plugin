@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+import { useContextStore } from '../../stores/context';
+const contextStore = useContextStore();
+
+</script>
 <template>
     <section id="kit-settings-info-box">
         <article>
@@ -38,10 +42,10 @@
                 Speichern.
             </p>
             <div class="kit-button-wrapper">
-                <button class="button" @click="$emit('show-rule-dialog')">
+                <button class="button" @click="contextStore.setShowRuleDialog(true);">
                     {{ $gettext('Rules for Tools anlegen') }}
                 </button>
-                <button class="button" @click="$emit('enable-explore-mode')">
+                <button class="button" @click="contextStore.setExploreMode(true);">
                     {{ $gettext('Erstmal umschauen') }}
                 </button>
             </div>

@@ -41,12 +41,11 @@ const isTeacher = computed(() => {
     flex-wrap: wrap;
     background-color: var(--content-color-20);
     padding: 30px;
-    margin-bottom: 15px;
 
     img {
         width: 96px;
         height: 96px;
-        padding: 30px;
+        padding: 30px 30px 5px 30px;
         margin: auto 30px auto 0;
     }
     article {

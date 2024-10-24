@@ -16,6 +16,7 @@ import StudipWysiwyg from './components/studip/StudipWysiwyg.vue';
 
 import { ruleTemplate } from './static-strings.js';
 import TheSettingsInfoBox from './components/course/TheSettingsInfoBox.vue';
+import TheLadingpage from './components/course/TheLadingpage.vue';
 
 const contextStore = useContextStore();
 const toolsStore = useToolsStore();
@@ -24,10 +25,8 @@ const rulesStore = useRulesStore();
 
 const courseToolInterval = ref(null);
 
-const openRulesDialog = ref(false);
 const ruleContent = ref(null);
 const ruleReleased = ref(false);
-
 
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
@@ -35,8 +34,11 @@ const isTeacher = computed(() => {
 const appLoaded = computed(() => {
     return contextStore.appLoaded;
 });
-const exploreMode = computed(()=> {
+const exploreMode = computed(() => {
     return contextStore.exploreMode;
+});
+const showRuleDialog = computed(() => {
+    return contextStore.showRuleDialog;
 });
 
 const hasRule = computed(() => {
@@ -47,16 +49,19 @@ const rule = computed(() => {
     return hasRule.value ? rulesStore.all[0] : null;
 });
 
+const showLandingpage = computed(() => {
+    if (isTeacher.value) {
+        return !hasRule.value && !exploreMode.value;
+    }
+    return !rule.value.released;
+});
+
 const showSettingsInfo = computed(()=> {
     return (!hasRule.value || !rule.value.released || rule.value.content === '') && !exploreMode.value;
 });
 
-const updateShowRulesDialog = (state) => {
-    openRulesDialog.value = state;
-};
-
 const storeRules = () => {
-    updateShowRulesDialog(false);
+    contextStore.setShowRuleDialog(false);
     if (hasRule.value) {
         const updatedRule = {
             id: rule.value.id,
@@ -68,6 +73,7 @@ const storeRules = () => {
     } else {
         const rule = {
             content: ruleContent.value,
+            released: ruleReleased.value,
         };
         rulesStore.createRule(rule);
     }
@@ -90,8 +96,6 @@ const releaseRule = () => {
 const insertRuleTemplate = () => {
     ruleContent.value = ruleTemplate;
 };
-
-
 
 onBeforeMount(async () => {
     await courseToolsStore.fetchCourseToolsByCourse(contextStore.cid);
@@ -130,77 +134,80 @@ onBeforeUnmount(() => {
 <template>
     <template v-if="appLoaded">
         <div id="kit-app-wrapper">
-            <div id="kit-info-col">
-                <TheTeaserBox />
-                <TheInfoBox v-if="!showSettingsInfo"/>
-                <TheRuleBox v-if="hasRule && !showSettingsInfo" @edit-rule="updateShowRulesDialog(true)" @release="releaseRule()" />
-                <button v-if="!hasRule && isTeacher && !showSettingsInfo" class="button" @click="updateShowRulesDialog(true)">{{ $gettext('Rules for Tools anlegen') }}</button>
-            </div>
-            <div id="kit-content-col">
-                <template v-if="isTeacher">
-                    <TheSettingsInfoBox v-if="showSettingsInfo" @show-rule-dialog="updateShowRulesDialog(true)" @enable-explore-mode="contextStore.setExploreMode(true)" />
-                    <TheToolList v-if="!showSettingsInfo" />
-                    <StudipDialog
-                        v-if="isTeacher"
-                        :height="640"
-                        :width="880"
-                        :open="openRulesDialog"
-                        confirm-class="accept"
-                        :confirm-text="$gettext('Speichern')"
-                        :close-text="$gettext('Abbrechen')"
-                        :title="$gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools')"
-                        @update:open="updateShowRulesDialog"
-                        @confirm="storeRules"
+            <TheLadingpage v-if="showLandingpage" />
+            <template v-else>
+                <div id="kit-info-col">
+                    <TheInfoBox />
+                    <TheRuleBox v-if="hasRule" @edit-rule="contextStore.setShowRuleDialog(true)" @release="releaseRule()" />
+                    <button
+                        v-if="!hasRule && isTeacher && !showSettingsInfo"
+                        class="button"
+                        @click="contextStore.setShowRuleDialog(true)"
                     >
-                        <template #dialogContent>
-                            <div class="kit-rule-edit-wrapper">
-                                <div class="kit-rule-edit-info">
-                                    <StudipIcon shape="literature2" :size="96" class="kit-rule-edit-info-icon" />
-                                    <div class="kit-rule-edit-info-text">
-                                        <p>
-                                            Stellen Sie Regeln für die Nutzung von KI-Tools in Ihrer Lehrveranstaltung
-                                            auf (warum das wichtig ist, erfahren Sie hier). Bei der Formulierung helfen
-                                            Ihnen die folgenden Fragen:
-                                        </p>
-                                        <ul>
-                                            <li>
-                                                Möchten Sie KI-Tools in Ihrer Veranstaltung zulassen? Wenn ja, welche
-                                                und unter welchen Umständen? Wenn nein, warum nicht?
-                                            </li>
-                                            <li>
-                                                Wozu möchten Sie Studierende verpflichten, wenn sie KI-Tools nutzen?
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="kit-rule-edit-form">
-                                    <form class="default">
-                                        <label for="rule-content">
-                                            {{ $gettext('Rules for Tools') }}
-                                        </label>
-                                        <StudipWysiwyg id="rule-content" v-model="ruleContent"></StudipWysiwyg>
-                                        <button v-if="ruleContent === ''" class="button" @click.prevent="insertRuleTemplate">
-                                            {{ $gettext('Vorlage einfügen') }}
-                                        </button>
-                                        <br />
-                                        <label for="rule-released">
-                                            {{ $gettext('Sichtbar für Studierende') }}
-                                        </label>
-                                        <select id="rule-released" v-model="ruleReleased">
-                                            <option :value="false">{{ $gettext('Nein') }}</option>
-                                            <option :value="true">{{ $gettext('Ja') }}</option>
-                                        </select>
-                                    </form>
-                                </div>
-                            </div>
-                        </template>
-                    </StudipDialog>
-                </template>
-                <template v-else>
-                    <TheCourseToolList />
-                </template>
-            </div>
+                        {{ $gettext('Rules for Tools anlegen') }}
+                    </button>
+                </div>
+                <div id="kit-content-col">
+                    <template v-if="isTeacher">
+                        <TheToolList />
+                    </template>
+                    <template v-else>
+                        <TheCourseToolList />
+                    </template>
+                </div>
+            </template>
         </div>
+        <StudipDialog
+            v-if="isTeacher"
+            :height="640"
+            :width="880"
+            :open="showRuleDialog"
+            confirm-class="accept"
+            :confirm-text="$gettext('Speichern')"
+            :close-text="$gettext('Abbrechen')"
+            :title="$gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools')"
+            @update:open="contextStore.setShowRuleDialog"
+            @confirm="storeRules"
+        >
+            <template #dialogContent>
+                <div class="kit-rule-edit-wrapper">
+                    <div class="kit-rule-edit-info">
+                        <StudipIcon shape="literature2" :size="96" class="kit-rule-edit-info-icon" />
+                        <div class="kit-rule-edit-info-text">
+                            <p>
+                                Stellen Sie Regeln für die Nutzung von KI-Tools in Ihrer Lehrveranstaltung auf (warum
+                                das wichtig ist, erfahren Sie hier). Bei der Formulierung helfen Ihnen die folgenden
+                                Fragen:
+                            </p>
+                            <ul>
+                                <li>
+                                    Möchten Sie KI-Tools in Ihrer Veranstaltung zulassen? Wenn ja, welche und unter
+                                    welchen Umständen? Wenn nein, warum nicht?
+                                </li>
+                                <li>Wozu möchten Sie Studierende verpflichten, wenn sie KI-Tools nutzen?</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="kit-rule-edit-form">
+                        <form class="default">
+                            <label for="rule-content">
+                                {{ $gettext('Rules for Tools') }}
+                            </label>
+                            <StudipWysiwyg id="rule-content" v-model="ruleContent"></StudipWysiwyg>
+                            <button v-if="ruleContent === ''" class="button" @click.prevent="insertRuleTemplate">
+                                {{ $gettext('Vorlage einfügen') }}
+                            </button>
+                            <br />
+
+                            <label for="rule-released">
+                                <input type="checkbox" id="rule-released" v-model="ruleReleased" />
+                                {{ $gettext('Sichtbar für Studierende') }}
+                            </label>
+                        </form>
+                    </div>
+                </div>
+            </template>
+        </StudipDialog>
     </template>
     <template v-else>
         <StudipProgressIndicator :description="$gettext('Lade Tools...')" />
@@ -286,7 +293,6 @@ html.responsive-display {
             max-width: unset;
             padding-bottom: 2em;
         }
-
     }
 }
 #kitoolbox-index {

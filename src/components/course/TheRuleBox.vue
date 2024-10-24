@@ -1,4 +1,5 @@
 <script setup>
+import StudipIcon from '../studip/StudipIcon.vue';
 import { computed } from 'vue';
 import { useContextStore } from '../../stores/context';
 import { useRulesStore } from '../../stores/rules';
@@ -22,14 +23,19 @@ const showRule = computed(() => {
 </script>
 
 <template>
-    <form v-if="showRule" class="default collapsable kit-rule-box"  @submit.prevent>
-        <fieldset :class="{'collapsed': isTeacher }">
-            <legend>{{ $gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools') }} <span v-if="isTeacher && !rule.released">({{ $gettext('nicht veröffentlicht') }})</span></legend>
+    <form v-if="showRule" class="default collapsable kit-rule-box" @submit.prevent>
+        <fieldset :class="{ collapsed: isTeacher }">
+            <legend>
+                {{ $gettext('Rules for Tools: Verbindliche Hinweise zur Nutzung von KI-Tools') }}
+                <StudipIcon v-if="isTeacher" :shape="!rule.released ? 'visibility-invisible' : 'visibility-visible'" />
+            </legend>
             <article class="kit-rule-content">
                 <p v-html="rule.content"></p>
                 <div class="kit-rule-buttons-wrapper" v-if="isTeacher">
                     <button class="button" @click="$emit('edit-rule')">{{ $gettext('Bearbeiten') }}</button>
-                    <button v-if="!rule.released" class="button" @click="$emit('release')">{{ $gettext('Für Studierende sichtbar schalten') }}</button>
+                    <button v-if="!rule.released" class="button" @click="$emit('release')">
+                        {{ $gettext('Für Studierende sichtbar schalten') }}
+                    </button>
                 </div>
             </article>
         </fieldset>
@@ -49,5 +55,4 @@ const showRule = computed(() => {
         border-top: solid thin var(--content-color-40);
     }
 }
-
 </style>

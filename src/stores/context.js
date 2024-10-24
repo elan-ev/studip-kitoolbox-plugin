@@ -1,12 +1,12 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { api } from '../api.js';
 
 export const useContextStore = defineStore('kitoolbox-context', () => {
     const isTeacher = ref(false);
     const preferredLanguage = ref('de_DE');
     const appLoaded = ref(false);
     const exploreMode = ref(false);
+    const showRuleDialog = ref(false);
 
     const cid = computed(() => {
         return window.STUDIP.URLHelper.parameters.cid;
@@ -32,7 +32,12 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         exploreMode.value = val;
     }
 
+    function setShowRuleDialog(val) {
+        showRuleDialog.value = val;
+    }
+
     return {
+        showRuleDialog,
         exploreMode,
         isTeacher,
         preferredLanguage,
@@ -41,6 +46,7 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         appLoaded,
         setAppLoaded,
         setExploreMode,
+        setShowRuleDialog,
         setTeacherStatus,
         setPreferredLanguage,
     };
