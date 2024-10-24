@@ -15,10 +15,6 @@ const companion = computed(() => {
     <div class="kit-teaser">
         <img :src="companion" />
         <h2>{{ $gettext('Es sind noch keine KI-Tools aktiv.') }}</h2>
-        <template v-if="isTeacher">
-            <button class="button" @click="$emit('switch-mode-edit')">{{ $gettext('Tools aktivieren') }}</button>
-            <button class="button" @click="$emit('show-rules-dialog')">{{ $gettext('Rules for Tools bearbeiten') }}</button>
-        </template>
     </div>
 </template>
 <style lang="scss">

@@ -11,11 +11,9 @@ import TheToolList from './components/course/TheToolList.vue';
 import TheCourseToolList from './components/course/TheCourseToolList.vue';
 import TheRuleBox from './components/course/TheRuleBox.vue';
 import TheInfoBox from './components/course/TheInfoBox.vue';
-import TheTeaserBox from './components/course/TheTeaserBox.vue';
 import StudipWysiwyg from './components/studip/StudipWysiwyg.vue';
 
 import { ruleTemplate } from './static-strings.js';
-import TheSettingsInfoBox from './components/course/TheSettingsInfoBox.vue';
 import TheLadingpage from './components/course/TheLadingpage.vue';
 
 const contextStore = useContextStore();
@@ -54,10 +52,6 @@ const showLandingpage = computed(() => {
         return !hasRule.value && !exploreMode.value;
     }
     return !rule.value.released;
-});
-
-const showSettingsInfo = computed(()=> {
-    return (!hasRule.value || !rule.value.released || rule.value.content === '') && !exploreMode.value;
 });
 
 const storeRules = () => {
@@ -138,12 +132,12 @@ onBeforeUnmount(() => {
             <template v-else>
                 <div id="kit-info-col">
                     <TheInfoBox />
-                    <TheRuleBox v-if="hasRule" @edit-rule="contextStore.setShowRuleDialog(true)" @release="releaseRule()" />
-                    <button
-                        v-if="!hasRule && isTeacher && !showSettingsInfo"
-                        class="button"
-                        @click="contextStore.setShowRuleDialog(true)"
-                    >
+                    <TheRuleBox
+                        v-if="hasRule"
+                        @edit-rule="contextStore.setShowRuleDialog(true)"
+                        @release="releaseRule()"
+                    />
+                    <button v-if="!hasRule && isTeacher" class="button" @click="contextStore.setShowRuleDialog(true)">
                         {{ $gettext('Rules for Tools anlegen') }}
                     </button>
                 </div>

@@ -11,8 +11,8 @@ const isTeacher = computed(() => {
 </script>
 <template>
     <div id="kit-landing">
-    <TheTeaserBox />
-    <TheSettingsInfoBox v-if="isTeacher"/>
+        <TheTeaserBox />
+        <TheSettingsInfoBox v-if="isTeacher" />
     </div>
 </template>
 <style lang="scss">

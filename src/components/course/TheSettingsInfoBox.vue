@@ -1,8 +1,8 @@
 <script setup>
 import { useContextStore } from '../../stores/context';
 const contextStore = useContextStore();
-
 </script>
+
 <template>
     <section id="kit-settings-info-box">
         <article>
@@ -52,6 +52,7 @@ const contextStore = useContextStore();
         </article>
     </section>
 </template>
+
 <style lang="scss">
 #kit-settings-info-box {
     display: flex;

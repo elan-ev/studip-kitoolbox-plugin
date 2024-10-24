@@ -5,12 +5,15 @@ const props = defineProps({
     courseTool: Object,
     showQuotaState: {
         type: Boolean,
-        default: false
-    }
+        default: false,
+    },
 });
 
 const preview = computed(() => {
-    return  props.courseTool.preview || STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg');
+    return (
+        props.courseTool.preview ||
+        STUDIP.URLHelper.getURL('plugins_packages/elan-ev/KIToolbox/assets/images/kitoolbox-preview-default.svg')
+    );
 });
 
 const name = computed(() => {
@@ -31,10 +34,7 @@ const description = computed(() => {
                     <span v-if="toolTokenLimit !== null" :class="{ 'kit-token-warning': toolTokenLimit <= 0 }">
                         {{ $gettext('Übrige Tokens') + ': ' + toolTokenLimit }}
                     </span>
-                    <span
-                        v-if="userTokenLimit !== null"
-                        :class="{ 'kit-token-warning': userTokenLimit <= 0 }"
-                    >
+                    <span v-if="userTokenLimit !== null" :class="{ 'kit-token-warning': userTokenLimit <= 0 }">
                         <span v-if="toolTokenLimit !== null" class="seperator"> | </span>
                         {{ $gettext('Ihre restlichen Tokens') + ': ' + userTokenLimit }}
                     </span>
