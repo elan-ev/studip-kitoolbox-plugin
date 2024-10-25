@@ -51,7 +51,11 @@ const showLandingpage = computed(() => {
     if (isTeacher.value) {
         return !hasRule.value && !exploreMode.value;
     }
-    return !rule.value.released;
+
+    if (hasRule.value) {
+        return !rule.value.released;
+    }
+    return true;
 });
 
 const storeRules = () => {
