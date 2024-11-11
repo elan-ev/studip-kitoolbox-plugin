@@ -32,6 +32,12 @@ if (elem?.attributes?.['preferred-language'] !== undefined) {
   const preferredLanguage = elem.attributes['preferred-language'].value;
   contextStore.setPreferredLanguage(preferredLanguage);
 }
+if (elem?.attributes?.['static-texts'] !== undefined) {
+  const staticTexts = elem.attributes['static-texts'].value;
+  // console.log(staticTexts);
+  // console.log(JSON.parse(staticTexts));
+  contextStore.setStaticTexts(JSON.parse(staticTexts));
+}
 
 app.use(CKEditor);
 

@@ -8,6 +8,10 @@ const contextStore = useContextStore();
 const isTeacher = computed(() => {
     return contextStore.isTeacher;
 });
+
+const teaserText = computed(() => {
+    return isTeacher.value ? contextStore.staticTexts['landing-page-teacher'] : contextStore.staticTexts['landing-page-student'];
+});
 </script>
 
 <template>
@@ -17,19 +21,7 @@ const isTeacher = computed(() => {
             <header>
                 <h1>{{ $gettext('KI-Toolbox') }}</h1>
             </header>
-            <p v-if="isTeacher">
-                Die KI-Toolbox bietet einen direkten Zugriff auf alle KI-Tools, die an der Uni Osnabrück hochschulweit
-                zur Verfügung stehen. Als Lehrende haben Sie die Möglichkeit, aus den verfügbaren KI-Werkzeugen jene
-                auszuwählen und zu aktivieren, die Sie in Ihrer Lehrveranstaltung gemeinsam mit den Studierenden nutzen
-                wollen. Außerdem bietet die KI-Toolbox einen zentralen Ort, an dem Sie Regeln für Nutzung von KI-Tools
-                in Ihrer Lehrveranstaltung hinterlegen können.
-            </p>
-            <p v-else>
-                Die KI-Toolbox bietet einen direkten Zugriff auf ausgewählte KI-Tools, die an der Uni Osnabrück
-                hochschulweit zur Verfügung stehen. Sie finden über den KI-Toolbox-Reiter die in der Lehrveranstaltung
-                geltenden „Rules for Tools“ und können auf die KI-Werkzeuge zugreifen, die in dieser Lehrveranstaltung
-                genutzt werden dürfen.
-            </p>
+            <p v-html="teaserText"></p>
         </article>
     </section>
 </template>

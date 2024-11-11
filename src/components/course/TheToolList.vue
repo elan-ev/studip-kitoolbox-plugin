@@ -41,7 +41,7 @@ const courseTools = computed(() => {
 .kit-tool-list {
     list-style: none;
     padding: 0;
-    li {
+    > li {
         margin-bottom: 30px;
     }
 }

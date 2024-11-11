@@ -7,6 +7,7 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
     const appLoaded = ref(false);
     const exploreMode = ref(false);
     const showRuleDialog = ref(false);
+    const staticTexts = ref('');
 
     const cid = computed(() => {
         return window.STUDIP.URLHelper.parameters.cid;
@@ -28,6 +29,10 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         preferredLanguage.value = val;
     }
 
+    function setStaticTexts(val) {
+        staticTexts.value = val;
+    }
+
     function setExploreMode(val) {
         exploreMode.value = val;
     }
@@ -41,6 +46,7 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         exploreMode,
         isTeacher,
         preferredLanguage,
+        staticTexts,
         cid,
         userId,
         appLoaded,
@@ -49,5 +55,6 @@ export const useContextStore = defineStore('kitoolbox-context', () => {
         setShowRuleDialog,
         setTeacherStatus,
         setPreferredLanguage,
+        setStaticTexts
     };
 });

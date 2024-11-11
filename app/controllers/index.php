@@ -25,6 +25,17 @@ class IndexController extends StudipController
             $this->isTeacher = $perm->have_studip_perm('tutor', Context::getId(), $user->id);
             $this->preferredLanguage = str_replace('_', '-', $_SESSION['_language']);
             $this->getHelpbarContent();
+
+            $this->staticTexts = [
+                'landing-page-teacher-settings' => Config::get()->KITOOLBOX_TEXT_LANDING_PAGE_TEACHER_SETTINGS,
+                'landing-page-teacher' => Config::get()->KITOOLBOX_TEXT_LANDING_PAGE_TEACHER,
+                'landing-page-student' => Config::get()->KITOOLBOX_TEXT_LANDING_PAGE_STUDENT,
+                'rules-for-tools-template' => Config::get()->KITOOLBOX_TEXT_RULES_FOR_TOOLS_TEMPLATE,
+                'essential' => Config::get()->KITOOLBOX_TEXT_ESSENTIAL,
+            ];
+
+
+            $this->staticTexts = json_encode($this->staticTexts, JSON_HEX_QUOT);
         }
 
     }
