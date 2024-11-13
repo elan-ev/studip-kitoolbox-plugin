@@ -35,7 +35,7 @@ class IndexController extends StudipController
             ];
 
 
-            $this->staticTexts = json_encode($this->staticTexts, JSON_HEX_QUOT);
+            $this->staticTexts = json_encode($this->staticTexts);
         }
 
     }
