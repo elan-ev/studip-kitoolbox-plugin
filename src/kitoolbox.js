@@ -34,8 +34,6 @@ if (elem?.attributes?.['preferred-language'] !== undefined) {
 }
 if (elem?.attributes?.['static-texts'] !== undefined) {
   const staticTexts = elem.attributes['static-texts'].value;
-  // console.log(staticTexts);
-  // console.log(JSON.parse(staticTexts));
   contextStore.setStaticTexts(JSON.parse(staticTexts));
 }
 
