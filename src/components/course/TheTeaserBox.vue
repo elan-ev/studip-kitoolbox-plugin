@@ -19,7 +19,7 @@ const teaserText = computed(() => {
         <StudipIcon shape="network2" :size="96" />
         <article>
             <header>
-                <h1>{{ $gettext('KI-Toolbox') }}</h1>
+                <h1>{{ $gettext('Herzlich Willkommen in der KI-Toolbox!') }}</h1>
             </header>
             <p v-html="teaserText"></p>
         </article>
