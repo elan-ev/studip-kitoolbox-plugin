@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
         </div>
         <StudipDialog
             v-if="isTeacher"
-            :height="640"
+            :height="700"
             :width="880"
             :open="showRuleDialog"
             confirm-class="accept"
@@ -172,17 +172,21 @@ onBeforeUnmount(() => {
                         <StudipIcon shape="literature2" :size="96" class="kit-rule-edit-info-icon" />
                         <div class="kit-rule-edit-info-text">
                             <p>
-                                Stellen Sie Regeln für die Nutzung von KI-Tools in Ihrer Lehrveranstaltung auf (warum
-                                das wichtig ist, erfahren Sie hier). Bei der Formulierung helfen Ihnen die folgenden
-                                Fragen:
+                                Stellen Sie Regeln für die Nutzung von KI-Tools in Ihrer Lehrveranstaltung auf. Bei der
+                                Formulierung helfen Ihnen die folgenden Fragen:
                             </p>
                             <ul>
                                 <li>
                                     Möchten Sie KI-Tools in Ihrer Veranstaltung zulassen? Wenn ja, welche und unter
                                     welchen Umständen? Wenn nein, warum nicht?
                                 </li>
-                                <li>Wozu möchten Sie Studierende verpflichten, wenn sie KI-Tools nutzen?</li>
+                                <li>Was erwarten Sie von Ihren Studierenden, wenn sie KI-Tools nutzen?</li>
                             </ul>
+                            <p>
+                                Im Textfeld können Sie eigene Regeln aufstellen. Alternativ können Sie über „Vorlage
+                                einfügen“ eine frei lizensierte „Rules for Tools“-Erklärung einfügen und für Ihre Zwecke
+                                anpassen.
+                            </p>
                         </div>
                     </div>
                     <div class="kit-rule-edit-form">
@@ -263,6 +267,10 @@ onBeforeUnmount(() => {
         flex-grow: 1;
         max-width: 540px;
     }
+}
+
+.studip-dialog .kit-rule-edit-wrapper .kit-rule-edit-form .ck-editor .ck-editor__editable_inline {
+    height: 400px;
 }
 
 html:not(.size-large) {
