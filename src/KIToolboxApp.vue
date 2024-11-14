@@ -13,7 +13,6 @@ import TheRuleBox from './components/course/TheRuleBox.vue';
 import TheInfoBox from './components/course/TheInfoBox.vue';
 import StudipWysiwyg from './components/studip/StudipWysiwyg.vue';
 
-import { ruleTemplate } from './static-strings.js';
 import TheLadingpage from './components/course/TheLadingpage.vue';
 
 const contextStore = useContextStore();
@@ -92,7 +91,7 @@ const releaseRule = () => {
 };
 
 const insertRuleTemplate = () => {
-    ruleContent.value = ruleTemplate;
+    ruleContent.value = contextStore.staticTexts['rules-for-tools-template'];
 };
 
 onBeforeMount(async () => {
