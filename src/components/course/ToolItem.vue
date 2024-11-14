@@ -220,7 +220,7 @@ const description = computed(() => {
         flex-direction: row;
         gap: 10px 40px;
 
-        img {
+        > img {
             width: 270px;
             height: 180px;
         }
