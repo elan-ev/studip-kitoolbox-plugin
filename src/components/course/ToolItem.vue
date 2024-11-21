@@ -224,8 +224,10 @@ const description = computed(() => {
             width: 270px;
             height: 180px;
         }
-        p {
+        > p {
+            width: 360px;
             max-width: 540px;
+            flex-grow: 1;
         }
     }
     .kit-tool-item-footer {

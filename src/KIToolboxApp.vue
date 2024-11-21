@@ -219,7 +219,6 @@ onBeforeUnmount(() => {
 #kit-app-wrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     gap: 15px 50px;
     max-width: 1530px;
     margin: 20px auto 0 auto;
@@ -230,8 +229,8 @@ onBeforeUnmount(() => {
     }
 
     #kit-content-col {
-        width: 100%;
         max-width: 860px;
+        flex-grow: 1;
     }
 }
 .kit-rule-edit-wrapper {
@@ -274,8 +273,12 @@ onBeforeUnmount(() => {
 }
 
 html:not(.size-large) {
-    #kit-app-wrapper #kit-info-col {
-        max-width: unset;
+    #kit-app-wrapper {
+        flex-wrap: wrap;
+
+        #kit-info-col {
+            max-width: unset;
+        }
     }
     .kit-tool-item .kit-tool-item-body p {
         max-width: unset;
