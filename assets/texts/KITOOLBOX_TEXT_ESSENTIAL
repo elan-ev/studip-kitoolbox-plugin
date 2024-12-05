@@ -1,0 +1,55 @@
+<p>
+    Über die KI-Toolbox erhalten Sie Zugang zu verschiedenen generativen KI-Tools,
+    die an Ihrer Hochschule derzeit zur Verfügung stehen.
+</p>
+<p>
+    Grundsätzlich sollten Sie bei der Nutzung aller KI-Werkzeuge stets beachten:
+    Die Ausgaben von KI-Systemen können fehlerhaft sein und/oder stereotype
+    Darstellungsweisen reproduzieren. Daher empfehlen wir dringend, jeden Output
+    dahingehend zu überprüfen.
+</p>
+
+<p>
+    Mit Blick auf die Übermittlung von personenbezogenen Daten ist folgende Unterscheidung relevant:
+</p>
+<table>
+    <colgroup>
+        <col style="width: 30px">
+        <col>
+    </colgroup>
+    <tbody>
+        <tr>
+            <td colspan="2">
+                <i>1. Von Ihrer Hochschule oder Kooperationspartnern betriebene KI-Tools</i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img width="100%" src="https://develop.studip.de/studip/assets/images/icons/blue/key.svg" />
+            </td>
+            <td>
+                Diese Tools werden lokal auf Servern Ihrer Hochschule oder auf Servern von Kooperationspartnern,
+                mit denen eine Vereinbarung zur Auftragsverarbeitung besteht, betrieben. Über diese Dienste können Sie
+                personenbezogene Daten übermitteln.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <i>2. KI-Tools von externen Anbietern</i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img width="100%" src="https://develop.studip.de/studip/assets/images/icons/blue/exclaim.svg" />
+            </td>
+            <td>
+                Diese KI-Tools werden auf Servern externer Dienstleister gehostet, die möglicherweise außerhalb der EU stehen.
+                Ihre Hochschule ermöglicht durch geeignete Maßnahmen, dass Sie diese Tools über die KI-Toolbox
+                datenschutzkonform nutzen können. Das bedeutet: Sie benötigen keinen eigenen Account beim jeweiligen Tool-Anbieter.
+                Die Eingaben, die Sie über den Hochschulzugang an ein KI-System übermitteln, kann der Anbieter keiner Person zuordnen.
+                Beachten Sie jedoch: Sämtliche Eingaben werden an den Tool-Anbieter gesendet und durch dessen Dienste verarbeitet.
+                Geben Sie daher auf keinen Fall personenbezogene Daten ein und beachten Sie das Urheberrecht.
+            </td>
+        </tr>
+    </tbody>
+</table>

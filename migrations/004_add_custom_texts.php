@@ -13,7 +13,7 @@ final class AddCustomTexts extends Migration
         $statement = DBManager::get()->prepare($query);
         $statement->execute([
             'name' => 'KITOOLBOX_TEXT_LANDING_PAGE_TEACHER',
-            'value' => '',
+            'value' => file_get_contents(__DIR__ . '/../assets/texts/KITOOLBOX_TEXT_LANDING_PAGE_TEACHER'),
             'type' => 'i18n',
             'section' => 'KIToolbox',
             'range' => 'global',
@@ -21,15 +21,15 @@ final class AddCustomTexts extends Migration
         ]);
         $statement->execute([
             'name' => 'KITOOLBOX_TEXT_LANDING_PAGE_TEACHER_SETTINGS',
-            'value' => '',
+            'value' => file_get_contents(__DIR__ . '/../assets/texts/KITOOLBOX_TEXT_LANDING_PAGE_TEACHER_SETTINGS'),
             'type' => 'i18n',
             'section' => 'KIToolbox',
             'range' => 'global',
-            'description' => 'Text für die Erklärung der Einstellungen, diese wird Lehrenden angezeigt solange das Tool in der Veranstaltung noch nicht vom Lehrenden konfigureirt wurde.'
+            'description' => 'Text für die Erklärung der Einstellungen, diese wird Lehrenden angezeigt solange das Tool in der Veranstaltung noch nicht vom Lehrenden konfiguriert wurde.'
         ]);
         $statement->execute([
             'name' => 'KITOOLBOX_TEXT_LANDING_PAGE_STUDENT',
-            'value' => '',
+            'value' => file_get_contents(__DIR__ . '/../assets/texts/KITOOLBOX_TEXT_LANDING_PAGE_STUDENT'),
             'type' => 'i18n',
             'section' => 'KIToolbox',
             'range' => 'global',
@@ -37,7 +37,7 @@ final class AddCustomTexts extends Migration
         ]);
         $statement->execute([
             'name' => 'KITOOLBOX_TEXT_RULES_FOR_TOOLS_TEMPLATE',
-            'value' => '',
+            'value' => file_get_contents(__DIR__ . '/../assets/texts/KITOOLBOX_TEXT_RULES_FOR_TOOLS_TEMPLATE'),
             'type' => 'i18n',
             'section' => 'KIToolbox',
             'range' => 'global',
@@ -45,7 +45,7 @@ final class AddCustomTexts extends Migration
         ]);
         $statement->execute([
             'name' => 'KITOOLBOX_TEXT_ESSENTIAL',
-            'value' => '',
+            'value' => file_get_contents(__DIR__ . '/../assets/texts/KITOOLBOX_TEXT_ESSENTIAL'),
             'type' => 'i18n',
             'section' => 'KIToolbox',
             'range' => 'global',
