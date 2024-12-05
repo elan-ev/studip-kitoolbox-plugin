@@ -60,13 +60,14 @@ final class AddCustomTexts extends Migration
         LEFT JOIN `config_values` USING (`field`)
         LEFT JOIN `i18n`
           ON `table` = 'config'
-              AND `field` = 'value'
-              AND `object_id` = MD5(`config`.`field`)
-        WHERE `field` IN (
+              AND `i18n`.`field` = 'value'
+              AND `object_id` = CAST(MD5(`config`.`field`) AS CHAR CHARACTER SET latin1)
+        WHERE `config`.`field` IN (
              'KITOOLBOX_TEXT_ESSENTIAL',
              'KITOOLBOX_TEXT_RULES_FOR_TOOLS_TEMPLATE',
              'KITOOLBOX_TEXT_LANDING_PAGE_STUDENT',
-             'KITOOLBOX_TEXT_LANDING_PAGE_TEACHER',
+             'KITOOLBOX_TEXT_LANDING_PAGE_TEACHER_SETTINGS',
+             'KITOOLBOX_TEXT_LANDING_PAGE_TEACHER'
         )";
         DBManager::get()->exec($query);
 
