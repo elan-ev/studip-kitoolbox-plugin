@@ -22,7 +22,9 @@ class ClientRepository implements ClientRepositoryInterface
         $client = new ClientEntity();
         $client->setIdentifier($tool->oidc_client_id);
         $client->setName($tool->name);
-        $client->setRedirectUri($tool->oidc_redirect_url);
+        $client->setRedirectUri(
+            explode("\n", $tool->oidc_redirect_url)
+        );
         $client->setConfidential(true);
 
         return $client;

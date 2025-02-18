@@ -6,6 +6,7 @@ import StudipIcon from '../studip/StudipIcon.vue';
 import { useGettext } from 'vue3-gettext';
 import { useToolsStore } from './../../stores/tools';
 import StudipWysiwyg from '../studip/StudipWysiwyg.vue';
+import StudipTooltipIcon from "../studip/StudipTooltipIcon.vue";
 const { $gettext } = useGettext();
 
 const openRemoveDialog = ref(false);
@@ -266,8 +267,9 @@ const createTool = () => {
                             <input type="text" v-model="currentTool.oidc_client_secret" />
                         </label>
                         <label>
-                            {{ $gettext('OIDC Redirect URL') }}
-                            <input type="url" v-model="currentTool.oidc_redirect_url" />
+                            {{ $gettext('OIDC Redirect URLs') }}
+                            <studip-tooltip-icon :text="$gettext('Eine URL pro Zeile')" />
+                            <textarea v-model="currentTool.oidc_redirect_url" />
                         </label>
                     </div>
                     <div v-show="currentTool.auth_method === 'jwt'">
@@ -321,8 +323,9 @@ const createTool = () => {
                             <input type="text" v-model="newTool.oidc_client_secret" />
                         </label>
                         <label>
-                            {{ $gettext('OIDC Redirect URL') }}
-                            <input type="url" v-model="newTool.oidc_redirect_url" />
+                            {{ $gettext('OIDC Redirect URLs') }}
+                            <studip-tooltip-icon :text="$gettext('Eine URL pro Zeile')" />
+                            <textarea v-model="newTool.oidc_redirect_url" />
                         </label>
                     </div>
                     <div v-show="newTool.auth_method === 'jwt'">
