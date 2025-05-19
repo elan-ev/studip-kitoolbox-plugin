@@ -19,12 +19,12 @@ class ClientRepository implements ClientRepositoryInterface
             return null;
         }
 
+        $redirect_urls = $tool->oidc_redirect_url ? explode("\n", $tool->oidc_redirect_url) : $tool->oidc_redirect_url;
+
         $client = new ClientEntity();
         $client->setIdentifier($tool->oidc_client_id);
         $client->setName($tool->name);
-        $client->setRedirectUri(
-            explode("\n", $tool->oidc_redirect_url)
-        );
+        $client->setRedirectUri($redirect_urls);
         $client->setConfidential(true);
 
         return $client;
