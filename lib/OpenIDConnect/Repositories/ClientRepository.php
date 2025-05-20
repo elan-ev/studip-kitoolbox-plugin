@@ -4,6 +4,7 @@ namespace KIToolbox\OpenIDConnect\Repositories;
 
 use KIToolbox\models\Tool;
 use KIToolbox\OpenIDConnect\Entities\ClientEntity;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class ClientRepository implements ClientRepositoryInterface
@@ -19,10 +20,18 @@ class ClientRepository implements ClientRepositoryInterface
             return null;
         }
 
+        if (empty($tool->oidc_redirect_url)) {
+            throw OAuthServerException::serverError(
+                'No OIDC redirect URLs are configured for this client.'
+            );
+        }
+
         $client = new ClientEntity();
         $client->setIdentifier($tool->oidc_client_id);
         $client->setName($tool->name);
-        $client->setRedirectUri($tool->oidc_redirect_url);
+        $client->setRedirectUri(
+            explode("\n", $tool->oidc_redirect_url)
+        );
         $client->setConfidential(true);
 
         return $client;
